@@ -1,0 +1,40 @@
+name = energy
+description = Sub theme of default theme, ec_resp used for the ENERGY main site
+package = Fpfis_cms_theme
+version = "2.3"
+core = "7.x"
+base theme = ec_resp
+php = 5.2.4
+multisite_version = 1.7
+
+stylesheets[all][] = "css/energy.css"
+
+scripts[] = scripts/energy.js
+
+regions[header_top] = "Header Top"
+regions[header_right] = "Header Right"
+
+regions[featured] = "Featured"
+regions[tools] = "Tools"
+regions[help] = "Help"
+
+regions[sidebar_left] = "Sidebar Left"
+regions[sidebar_right] = "Sidebar Right"
+
+regions[content_top] = "Content Top"
+regions[content] = "Content"
+regions[content_right] = "Content Right"
+regions[content_bottom] = "Content Bottom"
+
+regions[footer] = "Footer"
+
+settings[shortcut_module_link] = 0
+
+
+; Information added by drupal . org packaging script on 2011-01-05
+project = "drupal"
+datestamp = "1294208756"
+
+
+; Information added by Acquia . com packaging script
+acquia = "1"
