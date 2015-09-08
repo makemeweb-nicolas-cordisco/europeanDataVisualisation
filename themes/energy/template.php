@@ -29,7 +29,8 @@ function energy_preprocess_node(&$variables) {
           'links',
           'print_links',
           'og_group_ref',
-          'language'),
+          'language',
+        ),
         'group' => array('group_audience', 'group_content_access'),
       );
       $display_user_picture = FALSE;
@@ -44,7 +45,8 @@ function energy_preprocess_node(&$variables) {
           'links',
           'print_links',
           'og_group_ref',
-          'language'),
+          'language',
+        ),
         'group'   => array('group_audience', 'group_content_access'),
       );
       $display_user_picture = FALSE;
@@ -61,7 +63,8 @@ function energy_preprocess_node(&$variables) {
           'field_thumbnail',
           'og_roles_permissions',
           'og_group_ref',
-          'language'),
+          'language',
+        ),
         'group' => array('group_group', 'group_access'),
       );
       $display_submitted = FALSE;
@@ -76,7 +79,8 @@ function energy_preprocess_node(&$variables) {
           'links',
           'print_links',
           'og_group_ref',
-          'language'),
+          'language',
+        ),
         'group' => array('group_audience', 'group_content_access'),
       );
       break;
@@ -90,7 +94,8 @@ function energy_preprocess_node(&$variables) {
           'field_watching',
           'print_links',
           'og_group_ref',
-          'language'),
+          'language',
+        ),
         'group' => array('group_audience', 'group_content_access'),
       );
       $display_submitted = FALSE;
@@ -109,7 +114,8 @@ function energy_preprocess_node(&$variables) {
           'links',
           'print_links',
           'og_group_ref',
-          'language'),
+          'language',
+        ),
         'group' => array('group_audience', 'group_content_access'),
       );
       $display_user_picture = FALSE;
@@ -126,7 +132,8 @@ function energy_preprocess_node(&$variables) {
           'links',
           'print_links',
           'og_group_ref',
-          'language'),
+          'language',
+        ),
         'group' => array('group_audience', 'group_content_access'),
       );
       $suffixe = $gallerymedia_items;
@@ -142,7 +149,8 @@ function energy_preprocess_node(&$variables) {
           'links',
           'print_links',
           'og_group_ref',
-          'language'),
+          'language',
+        ),
         'group' => array('group_audience', 'group_content_access'),
       );
       break;
@@ -157,7 +165,8 @@ function energy_preprocess_node(&$variables) {
           'print_links',
           'field_article_publication_date',
           'og_group_ref',
-          'language'),
+          'language',
+        ),
         'group' => array('group_audience', 'group_content_access'),
       );
       break;
@@ -171,7 +180,8 @@ function energy_preprocess_node(&$variables) {
           'links',
           'print_links',
           'og_group_ref',
-          'language'),
+          'language',
+        ),
         'group' => array('group_audience', 'group_content_access'),
       );
       break;
@@ -288,7 +298,7 @@ function energy_preprocess_node(&$variables) {
       $output .= '</div>';
     }
 
-    if ($display_submitted) {
+    if (isset($display_submitted) && $display_submitted) {
       $output .= '<div class="node-info-submitted col-lg-6 col-md-6 col-sm-6 col-xs-12' . ($display_workbench ? "" : " col-lg-offset-6 col-md-offset-6 col-sm-offset-6") . '">';
       $output .= '<div class="well well-sm node-submitted clearfix"><small>';
       // Author picture.
@@ -305,7 +315,7 @@ function energy_preprocess_node(&$variables) {
 
   $images_location = $base_url . '/' . drupal_get_path('theme', 'energy');
 
-  if (isset($output)) {
+  if (isset($variables['content']['body'][0]['#markup'])) {
     $reg_exurl_pdf = "/<a.*?href=[\"']?(.*?)\.pdf[\"']?.*?>(.*?)<\\/a>/i";
     $reg_exurl_doc = "/<a.*?href=[\"']?(.*?)\.doc[\"']?.*?>(.*?)<\\/a>/i";
     $reg_exurl_zip = "/<a.*?href=[\"']?(.*?)\.zip[\"']?.*?>(.*?)<\\/a>/i";
@@ -323,6 +333,7 @@ function energy_preprocess_node(&$variables) {
     if (preg_match_all($reg_exurl_xls, $output, $url_xls)) {
       $output = preg_replace($reg_exurl_xls, '$0' . ' <img src="' . $images_location . '/images/excel_icon.gif" />', $output);
     }
+
+    $variables['content_with_icons'] = $output;
   }
-  $variables['content_with_icons'] = $output;
 }

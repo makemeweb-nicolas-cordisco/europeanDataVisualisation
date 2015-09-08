@@ -1,0 +1,396 @@
+@media only screen and (max-width: 1240px)
+{
+ .block-social-bookmark {
+   	 padding-left: 10px !important;
+  }
+  .view-topics, .view-topics-new-page {
+  	width: 99%; 
+  }
+   .page-latest-updates  .views-field-field-main-image, .page-news  .views-field-field-main-image, .page-news .views-field-field-thumbnail-image{
+	width: 36% !important;
+  }
+  
+}
+
+@media only screen and (min-width: 1030px) and (max-width: 1200px)
+{
+ 
+  .front .views-field-field-main-image,  .front .views-field-field-thumbnail-image{
+  	margin-right: 20px !important;
+  }
+  .views-field-field-show-last-updated-label {
+	margin-left: 39% !important; 
+  }
+}
+
+
+
+@media only screen and (max-width: 990px)
+{
+  .node-type-page .node-page  {
+  	width: 105% !important;
+  }
+  .page-node-3 .region-sidebar-right {
+	float: left;
+	margin-bottom: 20px;
+  }
+  .view-studies .view-filters {
+  	display: block;
+  }
+  .page-studies .region-sidebar-left, .page-publications  .region-sidebar-left{
+  	display:none;
+  }
+  .page-studies #content-wrapper, .view-studies {
+  	width: 99%;
+  }
+  
+  .page-studies #block-block-14 {
+  	width: 95%;
+  }
+  .region-footer #block-block-1 li {
+	margin-bottom: 15px;
+  }
+  
+  
+  .view-events {
+  	width: 108% !important;
+  }
+  .view-events .views-field-field-event-date-info {
+  	width: 30% !important;
+  	float: left !important;
+  	padding-left:0px;
+  }
+  .view-events .views-field-field-event-abstract {
+  	width: 70% !important;
+  	float: left !important;
+  	padding-left:30px !important;
+  }
+  .view-events .views-field-field-main-image img {
+	display:none;
+  }
+  
+  .block-social-bookmark {
+    padding-left: 10px !important;
+  }
+  
+ .view-topics .views-view-grid, .view-topics-new-page .views-view-grid {
+  	min-height: 22em !important;
+  }
+  
+  .front .region-sidebar-right  {
+  	margin-left: 2em;
+  	float: left; 
+  	width: 98%;
+  	margin-bottom: 15px;
+  }
+  
+  .front .view-news-to-use .views-field-field-main-image, .front .view-news-to-use .views-field-field-thumbnail-image {
+  	width: 35% !important; 
+  }
+  
+  .page-latest-updates .region-sidebar-left, .page-news  .region-sidebar-left{
+	display: none !important;
+  }
+  
+  .rss-btn {
+	width: 100% !important;
+  }
+  
+   .view-publications .views-exposed-form {
+	display: block; 
+  }
+  
+  
+}
+
+
+@media screen and (max-width: 768px)
+{
+  .node-type-page .node-page  {
+  	width: 105% !important;
+  }
+  .page-node-3 .region-sidebar-right {
+	float: left;
+	margin-bottom: 20px;
+  }
+  .view-studies .view-filters {
+  	display: block;
+  }
+  .page-studies .region-sidebar-left {
+  	display:none;
+  }
+  .page-studies #content-wrapper, .view-studies {
+  	width: 99%;
+  }
+  .page-studies #block-block-14 {
+  	width: 95%;
+  }
+  .region-footer #block-block-1 li {
+	margin-bottom: 15px;
+  }
+  
+  
+  .view-events, .view-consultations {
+  	width: 100% !important;
+  }
+   .view-events .views-field-field-event-date-info, .view-consultations .views-field-field-consultation-period {
+  	width: 100% !important;
+  	padding-left: 0px !important;
+  }
+  .view-events .views-field-field-event-abstract, .view-consultations .views-field-field-consultation-abstract {
+  	width: 110% !important;
+  	padding-left: 0px !important;
+  }
+  .view-events .views-field-field-main-image img {
+	display:none;
+  }
+  
+  .page-latest-updates .view-news-to-use .views-field-field-main-image, .view-news-to-use .views-field-field-event-main-image a img, .page-news  .views-field-field-main-image{
+	display: none;
+  }
+  .page-latest-updates  .views-field-field-event-date-info .associated_topic_item, .page-news .associated_topic_item{
+	float: none !important;
+  }
+  
+  .view-consultations .views-field-field-consultation-period {
+  	margin-bottom: 10px;
+  }
+  
+  .view-topics .views-view-grid, .view-topics-new-page .views-view-grid {
+  	min-height: 16em !important;
+  }
+  
+  .front .view-news-to-use, .front .view-news {
+  	margin-left: 0px !important;
+  }
+  .front .view-news-to-use .views-field-field-main-image, .front .view-news-to-use .views-field-field-thumbnail-image {
+  	width: 35% !important; 
+  }
+  .front .view-news-to-use .views-row .views-field-title h2 a, .front .view-news .views-row .views-field-title h2 a {
+  	margin-top: -8px !important;
+  }
+  .front .region-sidebar-right  {
+  	margin-left: 3em;
+  }
+  
+ .front .view-news-to-use .views-row .views-field-field-main-image img {
+    width: 210px !important;
+	height: 140px !important;
+  }
+  
+  .page-latest-updates .region-sidebar-left {
+	display: none !important;
+  }
+  
+  .views-field-field-show-last-updated-label {
+	margin-left: 35%;
+  }
+  .views-field-field-show-last-updated-label .field-content{
+	width: 150px;
+  }
+  .front #sidebar-right #block-block-5, .front #sidebar-right #block-block-4, .front #sidebar-right #block-block-17{
+	margin-left: -59px !important;
+  }
+  .front #sidebar-right #block-views-quick-links-block {
+	margin-left: -35px !important;
+  }
+  #block-multisite-twitterblock-fpfis-twitter {
+	margin-left: -70px;
+  }
+}
+
+@media only screen and (max-width: 480px)
+{
+  .node-type-page .node-page  {
+  	width: 110% !important;
+  }
+  #menu-button {
+  	margin-left: 6em;
+  }
+  .block-social-bookmark {
+    padding-left: 10px !important;
+  }
+  #block-social-bookmark-social-bar .panel-heading {
+    display: none;
+  }
+  
+  .view-topics .views-view-grid, .view-topics-new-page .views-view-grid {
+    min-height: auto !important;
+  }
+  .front .views-field-field-main-image, .front .views-field-field-thumbnail-image{
+    margin-bottom: 5px;
+  }
+  .front .view-id-news_to_use {
+  	margin-left: 0px !important;
+  }
+  
+  .front #sidebar-right {
+  	width: 85% !important;
+  }
+  .front .views-field-field-main-image , .front .views-field-field-thumbnail-image{
+    margin-bottom: 20px;
+  }
+  
+  .front .view-news-to-use .views-row .views-field-field-main-image img, .front .views-field-field-thumbnail-image img {
+    width: 210px !important;
+	height: 140px !important;
+	margin-right:30px;
+  }
+  .front .region-sidebar-right  {
+	margin-left: 0em !important;
+  }
+  .front .view-news-to-use .views-field-title, .front .view-news-to-use  .views-field-field-abstract {
+    
+  }
+  .page-latest-updates  .views-field-field-event-date-info .associated_topic_item, .page-news  .views-field-field-event-date-info .associated_topic_item {
+	max-width: 200px !important; 
+  }
+  
+  .om-maximenu.om-maximenu-block.om-maximenu-row ul.om-menu li {
+    width: 110% !important;
+  }
+  .front .view-news-to-use  .views-field-field-thumbnail-image {
+		float: none;
+		margin-bottom: 30px;
+	}
+  .views-field-field-show-last-updated-label {
+	margin-left: 0px; 
+  }
+  
+  .front #sidebar-right #block-block-5, .front #sidebar-right #block-block-4, .front #sidebar-right #block-block-17{
+	margin-left: -19px !important;
+  }
+  .front #sidebar-right #block-views-quick-links-block {
+	margin-left: 0px !important;
+  }
+  #block-multisite-twitterblock-fpfis-twitter {
+	margin-left: -29px;
+  }
+
+}
+
+@media only screen and (max-width: 320px)
+{
+   .view-studies .view-filters .views-widget{
+   	 padding-left: 0px;
+   	 float: none;
+   	} 
+   .page-latest-updates  .views-widget {
+	  padding-left: 0px !important;
+	}
+	
+   	#menu-button {
+  	  margin-left: 5em;
+ 	}
+ 	
+    .view-topics .views-view-grid, .view-topics-new-page .views-view-grid {
+      min-height: auto !important;
+    }
+	
+	.front .view-news-to-use .views-row .views-field-field-main-image img {
+	  width: 210px !important;
+	  height: 140px !important;
+	  
+	}
+	.front .region-sidebar-right  {
+	  margin-left: 0em !important;
+	}
+	.front .view-news-to-use .views-field-title, .front .view-news-to-use  .views-field-field-abstract {
+      padding-left: 0% !important;
+    }
+	
+	.page-latest-updates .view-news-to-use .views-field-field-main-image, .view-news-to-use .views-field-field-event-main-image a img, .page-news.view-news-to-use .views-field-field-main-image {
+	  display: none;
+	}
+	.page-latest-updates  .views-field-field-event-date-info .associated_topic_item, .page-news  .views-field-field-event-date-info .associated_topic_item {
+	  float: none !important;
+	}
+	
+	.view-publications .views-field-field-preview-image  {
+		margin-bottom: 20px;
+	}
+	
+	.front .view-news-to-use  .views-field-field-thumbnail-image {
+		float: none;
+		margin-bottom: 30px;
+	}
+  
+	
+ 	
+}
+
+@media only screen and (min-width: 480px) and (max-width: 550px)
+{
+  .front .view-news-to-use .views-field-field-main-image, .front .view-news-to-use .views-field-field-thumbnail-image {
+  	width: 48% !important;
+  }
+  .views-field-field-show-last-updated-label {
+	margin-left: 48% !important; 
+  }
+}
+@media only screen and (min-width: 551px) and (max-width: 670px)
+{
+  .front .view-news-to-use .views-field-field-main-image, .front .view-news-to-use .views-field-field-thumbnail-image{
+  	width: 40% !important;
+  }
+  .views-field-field-show-last-updated-label {
+	margin-left: 40% !important; 
+  }
+}
+@media only screen and (min-width: 800px) and (max-width: 980px)
+{
+  .front .view-news-to-use .views-field-field-main-image, .front .view-news-to-use .views-field-field-thumbnail-image  {
+  	width: 30% !important;
+  }
+  .views-field-field-show-last-updated-label {
+	margin-left: 30% !important; 
+  }
+}
+
+
+
+
+
+
+
+.front .view-news-to-use .views-row .views-field-field-main-image img {
+	height: 140px !important;
+	width: 210px !important;
+
+}
+
+
+.page-studies #block-block-14 {
+  	width: 97%;
+}
+.page-search #search-form {
+	margin-left: 0 !important;
+    width: 100% !important;
+}
+.page-search #content-wrapper  .apachesolr-browse-blocks {
+	display: none;
+}
+.page-search  #content-wrapper {
+    width: 70%;
+}
+.page-search .search-results {
+	width: 100% !important;
+}
+#block-current-search-standard {
+	top: 0% !important;
+}
+#block-current-search-standard h3 {
+	margin-left:0px !important;
+}
+.page-search .region-content .content ul {
+	margin-left: 0px !important;
+}
+.page-search .pager {
+    width: 100% !important;
+}
+.page-search #sidebar-left {
+    margin-top: 100px;
+}
+
+
+  

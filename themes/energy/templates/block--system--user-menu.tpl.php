@@ -53,7 +53,7 @@
 ?>
 
 <div id="<?php print $block_html_id; ?>" class="btn-group <?php print $classes; ?>">
-  <?php 
+  <?php
     $menu = menu_navigation_links("user-menu");
     $items = "";
 
