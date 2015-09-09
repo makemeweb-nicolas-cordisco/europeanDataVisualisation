@@ -111,7 +111,9 @@
         $suffixe .= '</div>';
       endif;
 
-      if (isset($prefix)) print $prefix;
+      if (isset($prefix)):
+        print $prefix;
+      endif;
 
       if(isset($content_with_icons)) :
         print render($content_with_icons);
@@ -119,7 +121,9 @@
         print render($content);
       endif;
 
-      if (isset($suffixe)) print $suffixe;
+      if (isset($suffixe)):
+        print $suffixe;
+      endif;
     ?>
 
   </div>

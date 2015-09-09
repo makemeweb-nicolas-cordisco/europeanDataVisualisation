@@ -336,4 +336,7 @@ function energy_preprocess_node(&$variables) {
 
     $variables['content_with_icons'] = $output;
   }
+  else {
+    $variables['content_with_icons'] = $output;
+  }
 }
