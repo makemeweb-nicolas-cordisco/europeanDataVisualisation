@@ -2,7 +2,7 @@
 
 /**
  * @file
- * ec_resp's theme implementation to display a single Drupal page.
+ * Ec_resp's theme implementation to display a single Drupal page.
  *
  * The doctype, html, head and body tags are not in this template. Instead they
  * can be found in the html.tpl.php template normally located in the
@@ -38,8 +38,8 @@
  * Navigation:
  * - $main_menu (array): An array containing the Main menu links for the
  *   site, if they have been configured.
- * - $secondary_menu (array): An array containing the Secondary menu links 
- *   for the site, if they have been configured. 
+ * - $secondary_menu (array): An array containing the Secondary menu links
+ *   for the site, if they have been configured.
  * - $breadcrumb: The breadcrumb trail for the current page.
  * - $menu_visible:Checking if the main menu is available in the region featured
  *

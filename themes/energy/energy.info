@@ -1,13 +1,14 @@
 name = energy
 description = Sub theme of default theme, ec_resp used for the ENERGY main site
 package = Fpfis_cms_theme
-version = "2.3"
+version = "3.1"
 core = "7.x"
 base theme = ec_resp
 php = 5.2.4
-multisite_version = 1.7
+multisite_version = 2.0
 
 stylesheets[all][] = "css/energy.css"
+stylesheets[all][] = "css/extra_energy.css"
 
 scripts[] = scripts/energy.js
 

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * ec_resp's theme implementation to display a node.
+ * Ec_resp's theme implementation to display a node.
  *
  * Available variables:
  * - $title: the (sanitized) title of the node.
@@ -91,14 +91,14 @@
 
   <div class="content clearfix"<?php print $content_attributes; ?>>
 
-    <?php 
+    <?php
       // We hide several elements now so that we can render them later.
       hide($content['comments']);
       hide($content['links']);
 
       // Theme author block.
       if ($display_submitted) :
-        $suffixe .= '<div class="row node-info">';
+        $suffixe = '<div class="row node-info">';
           $suffixe .= '<div class="node-info-submitted col-lg-6 col-md-6 col-sm-6 col-xs-12 col-lg-offset-6 col-md-offset-6 col-sm-offset-6">';
             $suffixe .= '<div class="well well-sm node-submitted clearfix"><small>';
               // Author picture.
@@ -111,13 +111,19 @@
         $suffixe .= '</div>';
       endif;
 
-      print $prefixe;
+      if (isset($prefix)):
+        print $prefix;
+      endif;
+
       if(isset($content_with_icons)) :
         print render($content_with_icons);
       else :
         print render($content);
       endif;
-      print $suffixe;
+
+      if (isset($suffixe)):
+        print $suffixe;
+      endif;
     ?>
 
   </div>
