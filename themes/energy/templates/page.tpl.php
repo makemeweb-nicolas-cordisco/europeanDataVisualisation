@@ -120,16 +120,36 @@ global $base_url;
     </div>
   </div><!-- /#layout-header -->
   
-  <div class="region-featured-wrapper 
-    <?php
-      if ($has_responsive_sidebar) :
-        print 'sidebar-visible-sm';
-      endif;
-    ?>
-  ">
-  
-    <?php print $regions['featured']; ?>
+    <div class="region-featured-wrapper <?php print ($has_responsive_sidebar ? 'sidebar-visible-sm' : ''); ?>">
+    <?php if ($menu_visible || $has_responsive_sidebar): ?>
+      <div class="mobile-user-bar navbar navbar-default visible-sm visible-xs" data-spy="affix" data-offset-top="82">
+        <div class="container">
 
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header" data-spy="affix" data-offset-top="165">
+
+            <?php if ($menu_visible): ?>
+              <button id="menu-button" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <div class="arrow-down"></div>
+              </button>
+            <?php endif; ?>
+
+            <?php if ($has_responsive_sidebar): ?>
+              <div class="sidebar-button-wrapper">
+                <button class="sidebar-button">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+              </div>
+            <?php endif; ?>
+
+          </div>
+        </div><!-- /.container -->
+      </div><!-- /.navbar -->
+    <?php endif; ?>
+
+    <?php print $regions['featured']; ?>
   </div>
 
   <?php if ($has_responsive_sidebar): ?>
