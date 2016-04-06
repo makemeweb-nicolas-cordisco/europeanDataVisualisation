@@ -1,0 +1,12 @@
+name = Makemeweb Charts
+description = Renders a Fusioncharts from json data, extracted from an Excel file
+uploaded to the Drupal node.
+core = 7.x
+
+dependencies[] = number
+dependencies[] = libraries
+dependencies[] = jquery_update
+
+package = Features
+version = 7.x-1.0
+features[features_api][] = api:2
