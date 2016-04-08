@@ -6,7 +6,7 @@ dependencies[] = number
 dependencies[] = libraries
 dependencies[] = jquery_update
 
-package = Features
 version = 7.x-1.0
+package = Features
 features[features_api][] = api:2
 php = 5.3
