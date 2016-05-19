@@ -20,7 +20,7 @@
 
           <?php if($i == 0): ?>
               <div class="checkbox checkbox-primary"><input id="all-countries" type="checkbox" name="countries" value="all" <?php print $countries_selected == "all" ? 'checked' : ''; ?>>
-              <label for="all-countries">Select All Countries</label></div>
+              <label for="all-countries"><?php print t('Select All Countries'); ?></label></div>
           <?php endif; ?>
         <?php endforeach; ?>
     </div>

@@ -109,7 +109,7 @@
           <?php print $content['charts_type_select']; ?>
         </div>
         <div class="select-row">
-          <label for="scenario" class="select-label">Scenario:</label>
+          <label for="scenario" class="select-label"><?php print t('Scenario:'); ?></label>
           <?php print $content['otherChartsByYears']; ?>
         </div>
         <div class="clearfix"></div>
