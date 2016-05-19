@@ -22,7 +22,7 @@ function mmw_charts_field_default_field_bases() {
         0 => 'tid',
       ),
     ),
-    'locked' => 0,
+    'locked' => 1,
     'module' => 'taxonomy',
     'settings' => array(
       'allowed_values' => array(
@@ -50,7 +50,7 @@ function mmw_charts_field_default_field_bases() {
         0 => 'fid',
       ),
     ),
-    'locked' => 0,
+    'locked' => 1,
     'module' => 'file',
     'settings' => array(
       'display_default' => 0,
@@ -76,7 +76,7 @@ function mmw_charts_field_default_field_bases() {
         0 => 'format',
       ),
     ),
-    'locked' => 0,
+    'locked' => 1,
     'module' => 'text',
     'settings' => array(
       'entity_translation_sync' => FALSE,
@@ -93,7 +93,7 @@ function mmw_charts_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'mmw_charts_year',
     'indexes' => array(),
-    'locked' => 0,
+    'locked' => 1,
     'module' => 'number',
     'settings' => array(
       'entity_translation_sync' => FALSE,

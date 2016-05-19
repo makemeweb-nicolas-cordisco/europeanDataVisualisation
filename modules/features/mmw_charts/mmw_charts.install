@@ -19,8 +19,6 @@ function mmw_charts_enable() {
       ->fields(array('disabled' => 0))
       ->condition('type', 'advanced_fusioncharts', '=')
       ->execute();
-  // Solr configuration add bundle.
-  multisite_drupal_toolbox_config_solr_bundle('advanced_fusioncharts', 'add');
   // Add type to the simplenews related content.
   multisite_drupal_toolbox_simplenews_related_content_type('advanced_fusioncharts', 'add');
 
@@ -39,8 +37,6 @@ function mmw_charts_enable() {
  */
 function mmw_charts_disable() {
 
-  // Solr configuration delete bundle.
-  multisite_drupal_toolbox_config_solr_bundle('advanced_fusioncharts', 'delete');
   // Add type to the simplenews related content.
   multisite_drupal_toolbox_simplenews_related_content_type('advanced_fusioncharts', 'delete');
   // Disable Advanced fusioncharts content type.
