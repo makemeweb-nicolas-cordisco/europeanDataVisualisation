@@ -1,0 +1,120 @@
+<?php
+/**
+ * @file
+ * MMW Charts Module file.
+ *
+ * @brief Main file for Drupal feature.
+ *
+ * @package mmw_charts
+ *
+ * @author Makemeweb
+ */
+
+include_once 'mmw_charts.features.inc';
+module_load_include('inc', 'mmw_charts', 'includes/mmw_charts.ajax');
+module_load_include('inc', 'mmw_charts', 'includes/mmw_charts.form');
+module_load_include('inc', 'mmw_charts', 'includes/mmw_charts.data');
+module_load_include('inc', 'mmw_charts', 'includes/mmw_charts.export');
+module_load_include('inc', 'mmw_charts', 'includes/mmw_charts.node');
+module_load_include('inc', 'mmw_charts', 'includes/mmw_charts.node_func');
+
+/**
+ * Implements hook_libraries_info().
+ */
+function mmw_charts_libraries_info() {
+  return array(
+    'PHPExcel' => array(
+      'name' => 'PHPExcel',
+      'vendor url' => 'http://phpexcel.codeplex.com/',
+      'download url' => 'https://github.com/PHPOffice/PHPExcel',
+      'version callback' => '_mmw_charts_get_library_version',
+      'path' => 'Classes',
+      'files' => array(
+        'php' => array(
+          'PHPExcel.php',
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Libraries API version callback.
+ *
+ * @return string
+ *   Return version of PHPExcel, if library not exist return 'n/a'.
+ */
+function _mmw_charts_get_library_version() {
+  $library = libraries_load('PHPExcel');
+  $changelog_file = $library['library path'] . '/changelog.txt';
+
+  if (file_exists($changelog_file)) {
+    $changelog = file_get_contents($changelog_file);
+    $match;
+
+    if (preg_match('/\d{4}-\d{2}-\d{2}\s+\(v([0-9\.]+)/', $changelog, $match)) {
+      return $match[1];
+    }
+    elseif (preg_match('/@version\s+([0-9\.]+)/', $changelog, $match)) {
+      return $match[1];
+    }
+  }
+
+  return 'n/a';
+}
+
+/**
+ * Implements hook_menu().
+ */
+function mmw_charts_menu() {
+  $items['mmw_charts/charts/ajax'] = array(
+    'page callback' => '_mmw_charts_get_json_action',
+    'page arguments' => array(3),
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access content'),
+    'delivery callback' => '_mmw_charts_ajax_callback',
+  );
+  $items['mmw_charts/charts/export'] = array(
+    'page callback' => '_mmw_charts_export_action',
+    'access callback' => TRUE,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function mmw_charts_theme() {
+  return array(
+    'node__advanced_fusioncharts' => array(
+      'variables' => array(),
+      'template' => 'node--advanced-fusioncharts' ,
+      'base hook' => 'node',
+      'path' => drupal_get_path('module', 'mmw_charts') . '/templates',
+    ),
+    'mmw_charts_categories_checkbox' => array(
+      'path' => drupal_get_path('module', 'mmw_charts') . '/templates',
+      'template' => 'mmw_charts_categories_checkbox',
+      'variables' => array(),
+    ),
+    'mmw_charts_sub_categories_checkbox' => array(
+      'path' => drupal_get_path('module', 'mmw_charts') . '/templates',
+      'template' => 'mmw_charts_sub_categories_checkbox',
+      'variables' => array(),
+    ),
+    'select_countries' => array(
+      'path' => drupal_get_path('module', 'mmw_charts') . '/templates',
+      'template' => 'select_countries',
+      'variables' => array(),
+    ),
+  );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Add custom submit for process to convert excel file to json format.
+ */
+function mmw_charts_form_advanced_fusioncharts_node_form_alter(&$form, &$form_state) {
+  $form['#submit'][] = '_mmw_charts_converts_excel_to_json';
+}
