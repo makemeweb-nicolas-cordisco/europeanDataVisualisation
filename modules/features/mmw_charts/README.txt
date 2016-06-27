@@ -1,7 +1,7 @@
 INTRODUCTION
 ------------
 
-Makemeweb Charts is a module for the European Commission.
+Makemeweb Charts is a module for the European Commission
 For the "Advanced Fusioncharts" content type, it renders
 a Fusioncharts display on full display node.
 The chart is rendered from json data, extracted from an Excel file
