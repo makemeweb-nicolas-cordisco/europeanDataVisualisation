@@ -124,7 +124,7 @@ function _mmw_charts_get_json_radar($themes, $full_data, $type, $countries_array
         $tooltip = 'Data: ' . $data['title'] . '{br}Country: ' . $countries_array[$country_key] . '{br}Value: ' . round($val, 2) . ' (' . $data['unit'] . ')';
         $full_data['dataset'][$theme][$year_key][$countries_mapping[$country_key]]['data'][] = array('value' => $val, 'toolText' => $tooltip);
       }
-      $full_data['dataset'][$theme]['seriesname'] = $data['title'] . '';
+      $full_data['dataset'][$theme]['seriesname'] = htmlspecialchars_decode($data['title']) . '';
     }
   }
   $data = array();
@@ -132,7 +132,7 @@ function _mmw_charts_get_json_radar($themes, $full_data, $type, $countries_array
   // by user (chart type, themes or countries).
   $full_data['categories'] = $categories;
   // Chart title.
-  $full_data['chart']['caption'] = trim($title, ', ') . ' (' . implode(',', $units) . ')';
+  $full_data['chart']['caption'] = htmlspecialchars_decode(trim($title, ', ')) . ' (' . implode(',', $units) . ')';
   $data['fullData'] = $full_data;
 
   return $data;
@@ -181,7 +181,7 @@ function _mmw_charts_get_json_single_select($themes, $full_data, $type, $countri
     }
   }
   $data = array();
-  $full_data['chart']['caption'] = $theme_data['title'] . " (" . $theme_data['unit'] . ")";
+  $full_data['chart']['caption'] = htmlspecialchars_decode($theme_data['title']) . " (" . $theme_data['unit'] . ")";
   $data['fullData'] = $full_data;
   return $data;
 }
@@ -253,7 +253,7 @@ function _mmw_charts_get_json_map($themes, $full_data, $type, $countries_array, 
   unset($full_data['categories']);
 
   $data = array();
-  $full_data['map']['caption'] = trim($title, ", ");
+  $full_data['map']['caption'] = htmlspecialchars_decode(trim($title, ", "));
   $full_data['map']['yaxisname'] = implode(",", $units);
   $data['fullData'] = $full_data;
 
@@ -313,7 +313,7 @@ function _mmw_charts_get_json_all_year($themes, $full_data, $type, $countries_ar
           $full_data['dataset'][$country_key_mapped][$theme]['data'][] = array("value" => $val, "toolText" => $tooltip);
         }
         $full_data['dataset'][$country_key_mapped][$theme]['color'] = $colors[$country_key];
-        $full_data['dataset'][$country_key_mapped][$theme]['seriesname'] = $data['title'] . ' ' . $country_key_mapped;
+        $full_data['dataset'][$country_key_mapped][$theme]['seriesname'] = htmlspecialchars_decode($data['title']) . ' ' . $country_key_mapped;
         // If not >2 display default circle anchor.
         if ($theme_count > 2 && $type != 'stackedarea2d') {
           $full_data['dataset'][$country_key_mapped][$theme]['anchorSides'] = $theme_count;
@@ -326,7 +326,7 @@ function _mmw_charts_get_json_all_year($themes, $full_data, $type, $countries_ar
   }
 
   $data = array();
-  $full_data['chart']['caption'] = trim($title, ", ");
+  $full_data['chart']['caption'] = htmlspecialchars_decode(trim($title, ", "));
   $full_data['chart']['yaxisname'] = implode(",", $units);
   $data['fullData'] = $full_data;
 
@@ -385,7 +385,7 @@ function _mmw_charts_get_json_dual_y($themes, $full_data, $type, $countries_arra
       }
 
       $full_data['dataset'][$country_key_mapped][$theme]['color'] = $colors[$country_key];
-      $full_data['dataset'][$country_key_mapped][$theme]['seriesname'] = $data['title'] . ' ' . $country_key_mapped;
+      $full_data['dataset'][$country_key_mapped][$theme]['seriesname'] = htmlspecialchars_decode($data['title']) . ' ' . $country_key_mapped;
       if ($country_key != 'eu28' && $country_key != 'eu27') {
         $full_data['dataset'][$country_key_mapped][$theme]['renderAs'] = "line";
         $full_data['dataset'][$country_key_mapped][$theme]['parentYAxis'] = "S";
@@ -405,7 +405,7 @@ function _mmw_charts_get_json_dual_y($themes, $full_data, $type, $countries_arra
     $theme_count++;
   }
   $data = array();
-  $full_data['chart']['caption'] = trim($title, ', ');
+  $full_data['chart']['caption'] = htmlspecialchars_decode(trim($title, ', '));
   $full_data['chart']['pYAxisName'] = 'European Union (' . implode(',', $units) . ')';
   $full_data['chart']['sYAxisName'] = 'Countries (' . implode(',', $units) . ')';
   $data['fullData'] = $full_data;

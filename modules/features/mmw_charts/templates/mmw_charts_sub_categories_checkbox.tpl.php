@@ -11,12 +11,15 @@
 
 <?php $c = 0; ?>
 <?php foreach ($elements as $element): ?>
-  <?php if($element['level'] == 2 && floor(count($elements) / 2) == $c): ?>
-    </div><div class="themes-col">
+  <?php if($element['level'] == 3 && floor(count($elements) / 2) == $c): ?>
+    </div></div><div class="col-sm-6">
+        <div class="row">
   <?php endif; ?>
   <?php $c++; ?>
-  <div class="menu-lvl<?php print $element['level']; ?> checkbox checkbox-primary">
-    <input id="theme-<?php print $element['file']; ?>" type="checkbox" name="themes[]" value="<?php print $element['file']; ?>"<?php print $element['checked']; ?>>
+  <div class="menu-lvl<?php print $element['level']; ?> checkbox checkbox-primary" <?php if($element['level'] == 4): ?>style="display: none;"<?php endif; ?>>
+    <?php if(!$element['no-data']): ?>
+      <input id="theme-<?php print $element['file']; ?>" data-limited="<?php print $element['limited-data']; ?>" type="checkbox" name="themes[]" value="<?php print $element['file']; ?>" <?php print ' ' . $element['checked']; ?>>
+    <?php endif; ?> 
     <label for="theme-<?php print $element['file']; ?>"><?php print $element['name']; ?></label>
     <?php if(!empty($element['button'])): ?>
       <button class="lvl<?php print $element['level'] + 1; ?>-button">+</button>

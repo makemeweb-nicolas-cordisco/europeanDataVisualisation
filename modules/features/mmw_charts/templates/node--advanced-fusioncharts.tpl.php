@@ -89,74 +89,114 @@
     <?php print render($content['body']); ?>
   </div>
 
-  <div id="main-container" class="charts-container">
-    <div class="select-row title-row">
-      <h1 class="title" id="content-title"><?php print t('Statistics'); ?></h1>
-      <button class="btn-print"><i class="fa fa-print"></i><?php print t('Print'); ?></button>
-      <button class="btn-print"><i class="fa fa-play"></i><?php print t('Intro video'); ?></button>
-    </div>
-    <div class="clearfix"></div>
-    
-    <div id="container-charts-controls">
-      <div class="panels">
-        <div class="select-row">
-          <label for="themes-lvl1" class="select-label"><?php print t('Data:'); ?></label>
-          <?php print $content['data_select']; ?>
-        </div>
-        <div class="select-row">
-          <div id="graph-select-error-message" class="mmw-charts-hidden-element"><?php print t('Graph not compatible'); ?></div>
-          <label for="chart-types" class="select-label"><?php print t('Graph:'); ?></label>
-          <?php print $content['charts_type_select']; ?>
-        </div>
-        <div class="select-row">
-          <label for="scenario" class="select-label"><?php print t('Scenario:'); ?></label>
-          <?php print $content['otherChartsByYears']; ?>
-        </div>
-        <div class="clearfix"></div>
-        <hr>
-        <?php print $content['data_checkboxes']; ?>
+  <div class="mmw-charts-main-container">
+    <div class="title-row tooltips-row row hidden-xs">
+      <div class="col-xs-12">
+        <button class="btn-print"><i class="fa fa-print"></i><?php print t('Print'); ?></button>
+        <?php print $content['intro_video']; ?>
+        <?php print $content['glossary']; ?>
       </div>
-      <?php if($content['type']): ?>
-        <div class="clearfix"></div>
-        <div id="after-menu">
-          <div id="countries-chart-container" class="mmw-charts-hidden-element">
-            <?php if($content['staticData']['graphTypes'][$content['type']]['timeline']): ?>
-              <div id="absolute-year"><?php echo reset($content['yearToDisplay']); ?></div>
-            <?php endif; ?>
-            <div id="chart-container" class="left"></div>
-            <!--countries select div-->
-            <?php if(!empty($content['select_countries'])):
-              print $content['select_countries'];
-            endif; ?>
-          </div>
-        </div>
-        <div class="clearfix"></div>
+    </div>
+    
+    <div id="container-charts-controls" class="row">
+        <div class="col-xs-12">
+            <div class="panels col-xs-12">
+                <?php if (!empty($content['otherChartsByYears'])): ?>
+                  <div class="row">
+                      <div class="col-xs-12">
+                          <div class="select-row select-scenario pull-right pull-left-sm">
+                              <label for="scenario" class="select-label"><?php print t('Scenario:'); ?></label>
+                              <?php print $content['otherChartsByYears']; ?>
+                          </div>
+                      </div>
+                  </div>
+                <?php endif; ?>
 
-        <!--timeline-->
-        <div class="select-row timeline" class="mmw-charts-hidden-element">
-          <?php if($content['staticData']['graphTypes'][$content['type']]['timeline']): ?>
-            <div class="timeline-content">
-              <button id="play"><i class="fa fa-play"></i></button>
-              <div class="slider"></div>
-              <?php print $content['yearToDisplay_select'];  ?>
+                <div class="row">
+                    <div class="col-xs-12">
+                    <div class="select-row keep-float">
+                        <label for="super-categ" class="select-label"><?php print t('Data:'); ?></label>
+                        <?php print $content['super_categ']; ?>
+                    </div>
+                    <div class="select-row keep-float">
+                        <?php print $content['data_select']; ?>
+                    </div>
+                    <div class="select-row pull-right pull-left-sm">
+                        <div id="graph-select-error-message" class="mmw-charts-hidden-element"><?php print t('Graph not compatible'); ?></div>
+                        <label for="chart-types" class="select-label"><?php print t('Graph:'); ?></label>
+                        <?php print $content['charts_type_select']; ?>
+                    </div>
+                        </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                      <?php print $content['data_checkboxes']; ?>
+                    </div>
+                </div>
             </div>
-          <?php endif; ?>
-          <div class="exporters">
-              <?php print drupal_render($content['charts_form_exporter']); ?>
-          </div>
         </div>
-        <div class="clearfix"></div>
-      <?php else: ?>
-        <div class="charts-landing-img">
-          <?php print theme('image', array(
+      <div class="charts-landing-img col-xs-12" <?php if(!empty($content['themes'])): ?>style="display:none;"<?php endif; ?>>
+        <?php if(!empty($content['image_background_charts'])):
+          print theme('image', array(
             'path' => $content['image_background_charts'],
             'attributes' => array(
               'class' => array('img-responsive'),
             ),
-          )); ?>
+          ));
+        endif; ?>
+      </div>
+      <?php if($content['type']): ?>
+        <div id="after-menu" class="col-xs-12">
+          <div id="countries-chart-container" class="mmw-charts-hidden-element">
+            <?php if($content['staticData']['graphTypes'][$content['type']]['timeline']): ?>
+              <div id="absolute-year" class="countdown-year hidden-xs"><?php echo reset($content['yearToDisplay']); ?></div>
+            <?php endif; ?>
+            <div class="row">
+              <?php if(!empty($content['staticData']['graphTypes'][$content['type']]['select_country'])): ?>
+                <div id="chart-container" class="col-sm-9"></div>
+                <!--countries select div-->
+                <?php print $content['select_countries']; ?>
+              <?php else: ?>
+                <div id="chart-container" class="col-xs-12"></div>
+              <?php endif; ?>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <!--timeline-->
+        <div class="col-xs-12">
+          <div class="timeline" class="mmw-charts-hidden-element">
+            <?php if($content['staticData']['graphTypes'][$content['type']]['timeline']): ?>
+              <div class="timeline-content">
+                <button id="play"><i class="fa fa-play"></i></button>
+                <div class="slider hidden-xs"></div>
+                <?php print $content['yearToDisplay_select'];  ?>
+              </div>
+              <div class="exporters player-button">
+            <?php else: ?>
+              <div class="exporters">
+            <?php endif; ?>
+                <a href="#" id="show-country-select-mmw-charts" class="visible-xs-inline-block hidden-sm hidden-md hidden-lg">
+                    <i class="fa fa-filter" aria-hidden="true"></i>
+                    <span><?php print t('Show countries'); ?></span>
+                </a>
+                <?php print drupal_render($content['charts_form_exporter']); ?>
+            </div>
+          </div>
         </div>
       <?php endif; ?>
     </div>
+    <div class="tooltips-row row visible-xs-block hidden-sm hidden-md hidden-lg">
+      <div class="col-xs-12">
+        <button class="btn-print"><i class="fa fa-print"></i><?php print t('Print'); ?></button>
+        <?php print $content['intro_video']; ?>
+        <?php print $content['glossary']; ?>
+      </div>
+    </div>    
+    
     <?php print $content['data_map']; ?>
     <?php print l('<span>' . t('Charts ajax url') . '</span>', 'mmw_charts/charts/ajax', array(
       'html' => TRUE,

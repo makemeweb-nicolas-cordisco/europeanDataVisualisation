@@ -21,6 +21,20 @@ class XLSReader {
   private $reader = NULL;
 
   /**
+   * Excel sheets.
+   *
+   * @var Array
+   */
+  private $sheets = array();
+
+  /**
+   * String filename.
+   *
+   * @var Array
+   */
+  private $filename = "";
+
+  /**
    * File to be process.
    *
    * @var PHPExcel
@@ -74,6 +88,9 @@ class XLSReader {
 
       return PHPEXCEL_ERROR_LIBRARY_NOT_FOUND;
     }
+    $cache_method = PHPExcel_CachedObjectStorageFactory:: cache_to_phpTemp;
+    $cache_settings = array(' memoryCacheSize ' => '8MB');
+    PHPExcel_Settings::setCacheStorageMethod($cache_method, $cache_settings);
 
     $this->reader = new PHPExcel_Reader_Excel2007();
     $this->reader->setReadDataOnly(TRUE);
@@ -96,12 +113,9 @@ class XLSReader {
     elseif (!is_file($filename) || !is_readable($filename)) {
       throw new Exception($filename . " does not exists or is unreadable.");
     }
-    // Load file with PHPExcel.
-    $this->file = $this->reader->load($filename);
-    // If load is not successfull throw exception.
-    if (!$this->file instanceof PHPExcel) {
-      throw new Exception("Failed to load file : " . $filename);
-    }
+    $this->filename = $filename;
+
+    $this->sheets = $this->reader->listWorksheetInfo($filename);
   }
 
   /**
@@ -110,31 +124,30 @@ class XLSReader {
    * @param PHPExcel_Worksheet $sheet
    *   Excel sheet.
    */
-  private function sort(PHPExcel_Worksheet $sheet) {
+  private function sort(PHPExcel_Worksheet $sheet, $sheet_index) {
     $sheet_name = $sheet->getTitle();
-    // Get sheet index.
-    $index = $this->file->getIndex($sheet);
     // Only take valid files : {iso}-{i or s}.
-    if (preg_match("#^[a-zA-Z0-9]{2,4}\-(I|S)$#", $sheet_name)) {
+    if (preg_match("#^[a-zA-Z0-9]{2,4}\-(A|B)$#", $sheet_name)) {
 
       // Extract headers.
-      if ($index === 2) {
+      if ($sheet_index === 3) {
         $this->extractHeaders($sheet);
       }
 
       // Extract Data.
       $this->extractData($sheet);
     }
-    if (preg_match("#^[a-zA-Z0-9]{2,4}\-(S)$#", $sheet_name)) {
+    if (preg_match("#^[a-zA-Z0-9]{2,4}\-(B)$#", $sheet_name)) {
       // Extract country.
-      if ($index > 1) {
+      if ($sheet_index > 2) {
         $this->extractCountry($sheet);
       }
     }
 
     // Definition sheet.
-    if ($index == 1) {
-      $this->extractThemes($sheet);
+    if ($sheet_index == 2 || $sheet_index == 1) {
+      $type = explode('-', $sheet_name);
+      $this->extractThemes($sheet, $type[1]);
     }
   }
 
@@ -144,13 +157,13 @@ class XLSReader {
    * @param PHPExcel_Worksheet $sheet
    *   Excel sheet.
    */
-  private function extractThemes(PHPExcel_Worksheet $sheet) {
+  private function extractThemes(PHPExcel_Worksheet $sheet, $type) {
     foreach ($sheet->getRowIterator() as $row) {
       /* @var $row PHPExcel_Worksheet_Row */
       $index = $row->getRowIndex();
 
-      if ($index > 5) {
-        $this->extractTheme($sheet, $row);
+      if ($index > 2) {
+        $this->extractTheme($sheet, $row, $type);
       }
     }
   }
@@ -197,8 +210,7 @@ class XLSReader {
    */
   private function extractCountry(PHPExcel_Worksheet $sheet) {
     // Extract country name.
-    $first_row = $sheet->getRowIterator()->current();
-    $cell_string = $first_row->getCellIterator()->current()->getValue();
+    $cell_string = $sheet->getCell('P1')->getValue();
     $arr = explode(":", $cell_string, 2);
     $country_name = $arr[0];
     // Extract country code.
@@ -217,7 +229,7 @@ class XLSReader {
    * @param PHPExcel_Worksheet_Row $row
    *   Excel row.
    */
-  private function extractTheme(PHPExcel_Worksheet $sheet, PHPExcel_Worksheet_Row $row) {
+  private function extractTheme(PHPExcel_Worksheet $sheet, PHPExcel_Worksheet_Row $row, $type) {
     $index = $row->getRowIndex();
     $cell_a = $sheet->getCell("A" . $index);
     $value = $cell_a->getValue();
@@ -256,30 +268,24 @@ class XLSReader {
     $cell_f = $sheet->getCell("F" . $index);
     $value_f = $cell_f->getValue();
     $no_data = ($value_f == 'no') ? TRUE : FALSE;
+    // Limited data.
+    $limited_data = (trim($value_f) == 'limited') ? TRUE : FALSE;
 
     // Unit.
     $cell_e = $sheet->getCell("E" . $index);
     $unit = $cell_e->getValue();
 
     if ($hierarchy) {
-      $prefix = "i_" . $index;
-      $this->iData[$prefix . '_' . drupal_strtolower(drupal_html_id($value))] = array(
-        "title" => check_plain($formated_value),
-        "rowIndex" => $index,
-        "hierarchy" => $hierarchy,
-        "key" => $prefix . '_' . drupal_strtolower(drupal_html_id($value)),
-        "data" => array(),
-        "no-data" => $no_data,
-        "unit" => $unit,
-      );
       $prefix = "s_" . $index;
       $this->sData[$prefix . '_' . drupal_strtolower(drupal_html_id($value))] = array(
         "title" => check_plain($formated_value),
         "rowIndex" => $index,
         "hierarchy" => $hierarchy,
+        "sheet_type" => $type,
         "key" => $prefix . '_' . drupal_strtolower(drupal_html_id($value)),
         "data" => array(),
         "no-data" => $no_data,
+        "limited-data" => $limited_data,
         "unit" => $unit,
       );
     }
@@ -292,27 +298,16 @@ class XLSReader {
    *   Excel sheet.
    */
   private function extractData(PHPExcel_Worksheet $sheet) {
-    $i_file = preg_match("#\-I$#", $sheet->getTitle());
-    $sanitized_name = preg_replace("#\-(i|s)$#", "", drupal_html_id($sheet->getTitle()));
+    $sanitized_name = preg_replace("#\-(a|b)$#", "", drupal_html_id($sheet->getTitle()));
+    $string_exploded = explode("-", $sheet->getTitle());
+    $type = $string_exploded[1];
     // Bind the iData set if the file is *-I file.
     if ($sanitized_name != 'eu27') {
-      if ($i_file) {
-        foreach ($this->iData as $file => $theme) {
-          $row_index = $theme["rowIndex"];
-          $this->iData[$file]["data"][$sanitized_name] = array();
-          foreach ($this->years as $column_index => $year) {
-            $value = $sheet->getCell($column_index . $row_index)->getFormattedValue();
-            $this->iData[$file]["data"][$sanitized_name][$year] = $value;
-          }
-        }
-      }
-      // Bind the iData set if the file is *-S file.
-      else {
-        // Foreach theme add data for each year.
-        foreach ($this->sData as $file => $theme) {
+      foreach ($this->sData as $file => $theme) {
+        // Only theme present on this sheet.
+        if ($type == $theme["sheet_type"]) {
           $row_index = $theme["rowIndex"];
           $this->sData[$file]["data"][$sanitized_name] = array();
-          // Fetch cell value for the given year.
           foreach ($this->years as $column_index => $year) {
             $value = $sheet->getCell($column_index . $row_index)->getFormattedValue();
             $this->sData[$file]["data"][$sanitized_name][$year] = $value;
@@ -327,30 +322,33 @@ class XLSReader {
    */
   public function createJsonFromFile() {
     // Foreach sheet sort its data.
-    foreach ($this->getSheets() as $sheet) {
-      /* @var $sheet PHPExcel_Worksheet */
-      $this->sort($sheet);
+    foreach ($this->sheets as $sheet_index => $sheet_data) {
+      $this->reader->setLoadSheetsOnly(array($sheet_data['worksheetName']));
+      // Load file with PHPExcel.
+      $this->file = $this->reader->load($this->filename);
+
+      // If load is not successfull throw exception.
+      if (!$this->file instanceof PHPExcel) {
+        throw new Exception("Failed to load file : " . $this->filename);
+      }
+
+      $sheet = $this->file->setActiveSheetIndex(0);
+      $this->sort($sheet, $sheet_index);
+      $this->file->disconnectWorksheets();
+      unset($this->file);
+      unset($sheet);
     }
     // Foreach data key, create new json file for all *-S sheets.
     $s_menu = array();
     $s_previous_parent_h1 = NULL;
     $s_previous_parent_h2 = NULL;
+    $s_previous_parent_h3 = NULL;
 
     foreach ($this->sData as $key => $data) {
-      $this->extractMenu($s_menu, $key, $data, $s_previous_parent_h1, $s_previous_parent_h2);
-      $previous_data = $data;
+      $this->extractMenu($s_menu, $key, $data, $s_previous_parent_h1, $s_previous_parent_h2, $s_previous_parent_h3);
       $this->outputJson[$key] = $data;
     }
-    // Foreach data key, create new json file for all *-I sheets.
-    $i_menu = array();
-    $i_previous_parent_h1 = NULL;
-    $i_previous_parent_h2 = NULL;
-    foreach ($this->iData as $key => $data) {
-      $this->extractMenu($i_menu, $key, $data, $i_previous_parent_h1, $i_previous_parent_h2);
-      $previous_data = $data;
-      $this->outputJson[$key] = $data;
-    }
-    $this->outputJson['iMenu'] = $i_menu;
+
     $this->outputJson['sMenu'] = $s_menu;
 
     // Some little operation on country array.
@@ -380,7 +378,7 @@ class XLSReader {
    * @param string $previous_parent_h2
    *   Level2 data theme parent.
    */
-  private function extractMenu(array &$menu, $file_key, array $data, &$previous_parent_h1, &$previous_parent_h2) {
+  private function extractMenu(array &$menu, $file_key, array $data, &$previous_parent_h1, &$previous_parent_h2, &$previous_parent_h3) {
     $hierarchy = $data["hierarchy"];
     if ($hierarchy === 1) {
       $menu[$file_key] = array(
@@ -388,6 +386,7 @@ class XLSReader {
         "file" => $file_key,
         "hierarchy" => $hierarchy,
         "no-data" => $data["no-data"],
+        "limited-data" => $data["limited-data"],
         "unit" => $data["unit"],
         "children" => array(),
       );
@@ -399,17 +398,31 @@ class XLSReader {
         "file" => $file_key,
         "hierarchy" => $hierarchy,
         "no-data" => $data["no-data"],
+        "limited-data" => $data["limited-data"],
         "unit" => $data["unit"],
         "children" => array(),
       );
       $previous_parent_h2 = $file_key;
     }
-    elseif ($hierarchy >= 3) {
+    elseif ($hierarchy === 3) {
       $menu[$previous_parent_h1]["children"][$previous_parent_h2]["children"][$file_key] = array(
         "name" => $data["title"],
         "file" => $file_key,
         "hierarchy" => $hierarchy,
         "no-data" => $data["no-data"],
+        "limited-data" => $data["limited-data"],
+        "unit" => $data["unit"],
+        "children" => array(),
+      );
+      $previous_parent_h3 = $file_key;
+    }
+    elseif ($hierarchy >= 4) {
+      $menu[$previous_parent_h1]["children"][$previous_parent_h2]["children"][$previous_parent_h3]["children"][$file_key] = array(
+        "name" => $data["title"],
+        "file" => $file_key,
+        "hierarchy" => $hierarchy,
+        "no-data" => $data["no-data"],
+        "limited-data" => $data["limited-data"],
         "unit" => $data["unit"],
         "children" => array(),
       );

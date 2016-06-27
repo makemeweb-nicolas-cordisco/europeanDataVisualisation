@@ -78,6 +78,24 @@ function mmw_charts_menu() {
     'page callback' => '_mmw_charts_export_action',
     'access callback' => TRUE,
   );
+  $items['admin/config/content/mmw_charts'] = array(
+    'title' => 'Makemeweb Charts - Settings',
+    'description' => 'Settings for landing image and tooltip link on full node render.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('_mmw_charts_admin_page'),
+    'file' => 'mmw_charts.admin.inc',
+    'file path' => drupal_get_path('module', 'mmw_charts') . '/includes',
+    'access arguments' => array('administer content'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['mmw_charts/settings/autocomplete'] = array(
+    'title' => 'AutoComp Menu for mmw_charts settings form',
+    'page callback' => '_mmw_charts_admin_page_autocomplete',
+    'access arguments' => array('access content'),
+    'file' => 'mmw_charts.admin.inc',
+    'file path' => drupal_get_path('module', 'mmw_charts') . '/includes',
+    'type' => MENU_CALLBACK,
+  );
   return $items;
 }
 

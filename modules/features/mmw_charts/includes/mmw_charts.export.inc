@@ -40,11 +40,11 @@ function _mmw_charts_export_action() {
     $theme_data = $data_json[$theme];
     // Create new sheet.
     $sheet = new PHPExcel_Worksheet();
-    $sheet->setTitle("Theme " . $j);
     $sheet->getColumnDimension("A")->setAutoSize(TRUE);
-    $sheet->setTitle(substr($theme_data["title"], 0, 25) . "...");
+    $sheet->setTitle(substr(drupal_html_id($theme_data["title"]), 0, 25) . "...");
+    $sheet->getCell("A1")->setValue('Source: PRIMES');
     $i = 0;
-    $row_index = 0;
+    $row_index = 1;
     foreach ($theme_data["data"] as $country => $values) {
       if (isset($countries[$countries_mapping[$country]])) {
         $row_index++;

@@ -9,53 +9,78 @@ var chart = null;
 var years = null;
 var playing = false;
 var index = 1;
+var selectLvl1Options;
+var chartTypeOptions;
 // countriesLeft is used in mini-map.js, main.js and mainMap.js.
 var countriesLeft = ["ru","ua","tk","by","md","mk","cs","al","ko","mo","ch","no","is","rd","ba"];
 
 // Remaping country ISO to FusionmapChart internal ID
 // used for mini map and chart maps/europe2.
 var entityDefs = [];
-function hideGraphForUnit(unit)
-{
+function hideGraphForUnit() {
+  jQuery('#chart-types').html(chartTypeOptions);
   jQuery("#chart-types option").show();
-  jQuery("#chart-types option[data-units-excluded~='" + unit + "']").hide();
+  if(jQuery("#themes input:checked[data-limited=1]").length>0){
+    jQuery("#chart-types option[data-limited=1]").remove();
+  }
 }
 jQuery(document).ready(function ($) {
 
+    //for IE remove hidden option because it is impossible to hide option in ie
+    selectLvl1Options = $('#themes-lvl1').html();
+    chartTypeOptions = $('#chart-types').html();
+    $('#themes-lvl1 .hidden').remove();
+    
     $('#themes-lvl1').change(function(evt){
-        $('#themes .main-theme-container input').prop('checked', false);
-        $('#themes .main-theme-container.' + $(this).val() + ' input:first').prop('checked', true);
-
-        var unit = $(this).find('option:selected').data('unit');
-        // If data not compatible with graph type.
-      if ($('#chart-types').val() != "" && $("#chart-types option:selected").data('units-excluded').indexOf(unit) != -1) {
-          $('#chart-types').val("");
-          $('.main-theme-container').hide();
-          $('.timeline').hide();
-          $('#countries-chart-container').hide();
-          $('#graph-select-error-message').show();
-      }
-        hideGraphForUnit(unit);
+      $('#themes .main-theme-container input').prop('checked', false);
+      $('#themes .main-theme-container.' + $(this).val() + ' input:first').prop('checked', true);
+      $('#themes .main-theme-container').hide();
+      $('#themes .main-theme-container.' + $(this).val()).show();
+      
       if ($('#chart-types').val() != "") {
           $('#countries-chart-container').show();
           $('.timeline').show();
-          $('#themes .main-theme-container').hide();
-          $('#themes .main-theme-container.' + $(this).val()).show();
+          $('.charts-landing-img').hide();
           $('#themes .main-theme-container.' + $(this).val() + ' input:first').trigger('change');
       }
+      $('#chart-types').removeProp('disabled');
+    });
+    
+    $('#themes-lvl0').change(function(evt){
+        $('#themes-lvl1').html(selectLvl1Options);
+        $('#themes-lvl1 option[value!=""]').removeAttr('selected').addClass('hidden');
+        $('#themes-lvl1 option[value=""]').prop('selected', true);
+        $('#themes-lvl1 option.'+$(this).val()).removeClass('hidden');
+        $('.main-theme-container').hide();
+        $('.timeline').hide();
+        $('.charts-landing-img').show();
+        $('#countries-chart-container').hide();
+        $('#themes-lvl1 .hidden').remove();
+        $('#themes-lvl1').removeAttr('disabled');
+        
     });
 
     $('#themes input').change(function(evt){
-      if (!Drupal.settings.mmw_charts.parameters['categories_multiselect']) {
+      if (Drupal.settings.mmw_charts.parameters && !Drupal.settings.mmw_charts.parameters['categories_multiselect']) {
           $('#themes input:checkbox:checked:not(#' + $(this).attr('id') + ')').removeAttr('checked');
       }
         var themesValues = $('#themes input:checkbox:checked').map(function() {
             return this.value;
         }).get();
-        if (themesValues.length > 0) {
+        if (themesValues.length > 0 && $('#chart-types').val() != "") {
             // Defined in main.js.
             updateData(themesValues);
         }
+        // If data not compatible with graph type.
+        if ($('#chart-types').val() != "" && $("#chart-types option:selected").data('limited') && $("#themes input:checked[data-limited=1]").length>0) {
+          $('#chart-types').val("");
+            $('.main-theme-container').hide();
+            $('.timeline').hide();
+            $('.charts-landing-img').show();
+            $('#countries-chart-container').hide();
+            $('#graph-select-error-message').show();
+        }
+        hideGraphForUnit();
     });
 
     var jsonString = $('.data-map').val();
@@ -99,8 +124,8 @@ jQuery(document).ready(function ($) {
         window.print();
     });
 
-    $('.lvl3-button').click(function(evt){
-        $('.menu-lvl3').toggle();
+    $('.lvl4-button').click(function(evt){
+        $('.menu-lvl4').toggle();
       if ($(this).text() == "+") {
           $(this).text("-");
       }
@@ -159,10 +184,26 @@ jQuery(document).ready(function ($) {
                 updateChart();
             });
       }
-
+      if($('#country-select').length) {
+          $('#show-country-select-mmw-charts').click(function(e) {
+              var link_country_mobile = $(this);
+              e.preventDefault();
+              if($('#country-select').hasClass('hidden-xs')) {
+                $('#country-select').removeClass('hidden-xs').hide().slideToggle('slow', function(){
+                    link_country_mobile.find('span').text('Hide countries');
+                });
+              }
+              else {
+                $('#country-select').slideToggle('slow', function(){
+                    $('#country-select').addClass('hidden-xs');
+                    link_country_mobile.find('span').text('Show countries');
+                });
+              }
+          });
+      }
       if (Drupal.settings.mmw_charts.parameters['timeline']) {
           $('#year').change(function(evt){
-              $('#absolute-year').html($(this).val());
+              $('.countdown-year').html($(this).val());
               updateChart();
           });
 

@@ -73,6 +73,9 @@ function mmw_charts_strongarm() {
         'path' => array(
           'weight' => '1',
         ),
+        'xmlsitemap' => array(
+          'weight' => 6,
+        ),
       ),
       'display' => array(),
     ),

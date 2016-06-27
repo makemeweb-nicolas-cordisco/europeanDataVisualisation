@@ -55,7 +55,7 @@ function buildMapLocal($) {
       mapChart = new FusionCharts({
           type: 'maps/europe2',
           renderAt: 'map-chart',
-          width: '250',
+          width: '100%',
           height: '250',
           showBorder: 0,
           dataFormat: 'json',

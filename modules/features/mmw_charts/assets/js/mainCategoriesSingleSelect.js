@@ -24,7 +24,7 @@ function updateChart(){
     // Add additionned values of others country at the end of data.
     if (euDataValue > 0) {
         Drupal.settings.mmw_charts.euData.value = euDataValue;
-        var obj = jQuery.extend({}, euData);
+        var obj = jQuery.extend({}, Drupal.settings.mmw_charts.euData);
         dataChart.push(obj);
     }
 

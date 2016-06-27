@@ -9,10 +9,10 @@
  */
 ?>
 
-<div class="right">
-    <div id="map-chart" >
+<div class="col-sm-3 col-xs-12">
+    <div id="map-chart" class="hidden-xs">
     </div>
-    <div id="country-select">
+    <div id="country-select" class="hidden-xs">
         <?php foreach ($countries_data as $i => $country): ?>
           <div class="checkbox checkbox-primary <?php print $country['key']; ?>"><input id="country-check-<?php print $country['key']; ?>" type="checkbox" name="countries[]" value="<?php print $country['mapping']; ?>"<?php print $country['checked']; ?> data-color="<?php print $country['color']; ?>">
               <label data-color="<?php print $country['color']; ?>" for="country-check-<?php print $country['key']; ?>"> <?php print $country['country']; ?></label>

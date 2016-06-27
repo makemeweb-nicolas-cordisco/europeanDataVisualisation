@@ -46,39 +46,39 @@ function _mmw_charts_get_nodes_by_data_type($node) {
   $year = array('_none' => $year_current_node[0]['value']);
 
   $other_nodes = array();
-  $data_type = field_get_items('node', $node, 'field_mmw_charts_data_type');
-
-  if (!empty($data_type)) {
-    $query = new entityfieldquery();
-
-    $query->entityCondition('entity_type', 'node')
+  $query = new entityfieldquery();
+  $query->entityCondition('entity_type', 'node')
       ->entityCondition('bundle', 'advanced_fusioncharts')
       ->propertyCondition('status', NODE_PUBLISHED)
-      ->propertyCondition('nid', $node->nid, '<>')
-      ->fieldCondition('field_mmw_charts_data_type', 'tid', $data_type[0]['tid'], '=');
-    $result = $query->execute();
-    if (isset($result['node'])) {
-      $other_node_datas = array_keys($result['node']);
-      $other_nodes = entity_load('node', $other_node_datas);
-    }
-    foreach ($other_nodes as $other_node) {
-      $year_node = field_get_items('node', $other_node, 'mmw_charts_year');
-      if (!empty($year_node)) {
-        $year[drupal_get_path_alias('node/' . $other_node->nid)] = $year_node[0]['value'];
-      }
+      ->propertyCondition('language', $node->language)
+      ->propertyCondition('nid', $node->nid, '<>');
+  $result = $query->execute();
+  if (isset($result['node'])) {
+    $other_node_datas = array_keys($result['node']);
+    $other_nodes = entity_load('node', $other_node_datas);
+  }
+  foreach ($other_nodes as $other_node) {
+    $year_node = field_get_items('node', $other_node, 'mmw_charts_year');
+    if (!empty($year_node)) {
+      $year[drupal_get_path_alias('node/' . $other_node->nid)] = $year_node[0]['value'];
     }
   }
   arsort($year);
-  return theme('select', array(
-    'element' => array(
-      '#attributes' => array(
-        'id' => 'scenario',
-        'class' => array(),
+  if (count($year) > 1) {
+    return theme('select', array(
+      'element' => array(
+        '#attributes' => array(
+          'id' => 'scenario',
+          'class' => array('labeled'),
+        ),
+        '#value' => '_none',
+        '#options' => $year,
       ),
-      '#value' => '_none',
-      '#options' => $year,
-    ),
-  ));
+    ));
+  }
+  else {
+    return '';
+  }
 }
 
 /**
@@ -96,27 +96,34 @@ function _mmw_charts_get_nodes_by_data_type($node) {
  */
 function _mmw_charts_get_categories_checkbox($themes_values, $menu, $display_type) {
   $element = array();
-  foreach ($menu as $k => $item) {
-    $lvl = 1;
-    $hidden = ' mmw-charts-hidden-element';
-    $checked = "";
-    if (in_array($item['file'], $themes_values)) {
-      $checked = "checked";
-    }
-    if ($display_type == $item['file']) {
-      $hidden = '';
-    }
+  foreach ($menu as $item) {
+    foreach ($item['children'] as $k => $item2) {
+      $lvl = 2;
+      $hidden = ' mmw-charts-hidden-element';
+      $checked = "";
+      $item['file'] = (isset($item['file'])) ? $item['file'] : '';
+      if (isset($item2['file'])) {
+        if (in_array($item2['file'], $themes_values)) {
+          $checked = "checked";
+        }
+        if ($display_type == $item2['file']) {
+          $hidden = '';
+        }
+      }
 
-    $element[$k] = array(
-      'file' => $item['file'],
-      'hidden' => $hidden,
-      'no-data' => $item['no-data'],
-      'name' => $item['name'],
-      'checked' => $checked,
-      'level' => $lvl,
-    );
-    if (!empty($item['children'])) {
-      _mmw_charts_get_sub_categories_checkbox($element[$k]['children'], $item['children'], $themes_values, $lvl + 1);
+      $element[$k] = array(
+        'parent' => $item['file'],
+        'file' => $item2['file'],
+        'hidden' => $hidden,
+        'no-data' => $item2['no-data'],
+        'limited-data' => $item2['limited-data'],
+        'name' => $item2['name'],
+        'checked' => $checked,
+        'level' => $lvl,
+      );
+      if (!empty($item2['children'])) {
+        _mmw_charts_get_sub_categories_checkbox($element[$k]['children'], $item2['children'], $themes_values, $lvl + 1);
+      }
     }
   }
   return theme('mmw_charts_categories_checkbox', array('elements' => $element));
@@ -137,20 +144,22 @@ function _mmw_charts_get_categories_checkbox($themes_values, $menu, $display_typ
 function _mmw_charts_get_sub_categories_checkbox(&$element, $items, $themes, $lvl) {
 
   foreach ($items as $k => $item) {
-    if ($lvl == 2) {
+    if ($lvl == 3) {
       $element[$k] = array('button' => FALSE);
       if (count($item['children']) > 0) {
         $element[$k]['button'] = TRUE;
       }
     }
-    if (!$item["no-data"]) {
+    if (!$item["no-data"] || !empty($item['children'])) {
       $checked = '';
       if (in_array($item['file'], $themes)) {
         $checked = "checked";
       }
+      $element[$k]['no-data'] = $item['no-data'];
       $element[$k]['file'] = $item['file'];
       $element[$k]['name'] = $item['name'];
       $element[$k]['checked'] = $checked;
+      $element[$k]['limited-data'] = $item['limited-data'];
       $element[$k]['level'] = $lvl;
       if (!empty($item['children'])) {
         _mmw_charts_get_sub_categories_checkbox($element[$k]['children'], $item['children'], $themes, $lvl + 1);
@@ -175,7 +184,6 @@ function _mmw_charts_get_sub_categories_checkbox(&$element, $items, $themes, $lv
  */
 function _mmw_charts_get_select_countries($static_data, $countries, $type) {
 
-  $c = 0;
   $checked = '';
   $countries_data = array();
   foreach ($countries as $country_key => $country) {
@@ -221,7 +229,6 @@ function _mmw_charts_get_select_countries($static_data, $countries, $type) {
  */
 function _mmw_charts_generate_data_select($themes, $menu) {
 
-  $output_select = '<select id="themes-lvl1">';
   $data_select_element = array(
     '#options' => array(),
     '#value' => 0,
@@ -230,34 +237,74 @@ function _mmw_charts_generate_data_select($themes, $menu) {
 
   $themes_values = explode(',', $themes);
   $display_type = FALSE;
-  $output_select .= '<option class="menu-lvl1" value="" selected>Please choose a data</option>';
+  $output_select_level0 = '';
+  $output_select = '';
   foreach ($menu as $item) {
     $selected = "";
+    $lvl1_hidden = 'hidden';
+    $item['file'] = (isset($item['file'])) ? $item['file'] : "empty";
+    $item['name'] = (isset($item['name'])) ? $item['name'] : "";
+
+    // First foreach to know item selected in subset for hidden property.
     foreach ($item['children'] as $item2) {
+      $lvl1_selected = "";
+      if (in_array($item2['file'], $themes_values)) {
+        $lvl1_hidden = "";
+      }
+      foreach ($item2['children'] as $item3) {
+        if (in_array($item3['file'], $themes_values)) {
+          $lvl1_hidden = "";
+        }
+        foreach ($item3['children'] as $item4) {
+          if (in_array($item4['file'], $themes_values)) {
+            $lvl1_hidden = "";
+          }
+        }
+      }
+    }
+    // Second foreach.
+    foreach ($item['children'] as $item2) {
+      $lvl1_selected = "";
       if (in_array($item2['file'], $themes_values)) {
         $selected = "selected";
-        $display_type = $item['file'];
+        $lvl1_selected = "selected";
+        $display_type = $item2['file'];
       }
       foreach ($item2['children'] as $item3) {
         if (in_array($item3['file'], $themes_values)) {
           $selected = "selected";
-          $display_type = $item['file'];
+          $lvl1_selected = "selected";
+          $display_type = $item2['file'];
+        }
+        foreach ($item3['children'] as $item4) {
+          if (in_array($item4['file'], $themes_values)) {
+            $selected = "selected";
+            $lvl1_selected = "selected";
+            $display_type = $item2['file'];
+          }
         }
       }
+      $output_select .= '<option class="menu-lvl1 ' . $item['file'] . ' ' . $lvl1_hidden . '" data-limited="' . $item2['limited-data'] . '" value="' . $item2['file'] . '" ' . $lvl1_selected . '>' . $item2['name'] . '</option>';
     }
 
-    if (in_array($item['file'], $themes_values)) {
-      $selected = "selected";
-      $display_type = $item['file'];
-    }
     $data_select_element['options'][$item['file']] = array(
       'value' => $item['name'],
     );
-    $output_select .= '<option class="menu-lvl1" data-unit="' . $item['unit'] . '" value="' . $item['file'] . '" ' . $selected . '>' . $item['name'] . '</option>';
+    $output_select_level0 .= '<option class="menu-lvl0" value="' . $item['file'] . '" ' . $selected . '>' . $item['name'] . '</option>';
   }
-  $output_select .= '</select>';
+  if (empty($themes)) {
+    $selected = "selected";
+    $disabled = "disabled";
+  }
+  else {
+    $selected = '';
+    $disabled = '';
+  }
+  $output_select_level0 = '<select id="themes-lvl0" class="labeled"><option class="menu-lvl0" value="" ' . $selected . '>' . t('Please choose a category') . '</option>' . $output_select_level0 . '</select>';
+  $output_select = '<select id="themes-lvl1" ' . $disabled . '><option class="menu-lvl1" value="" ' . $selected . '>' . t('Please choose an indicator') . '</option>' . $output_select . '</select>';
 
   return array(
+    $output_select_level0,
     $output_select,
     _mmw_charts_get_categories_checkbox($themes_values, $menu, $display_type),
   );
@@ -273,7 +320,7 @@ function _mmw_charts_generate_data_select($themes, $menu) {
  *   An html select tag, used for create slide bar years.
  */
 function _mmw_charts_generate_year_select_for_slider($year_to_display) {
-  $output_select = '<select id="year" class="mmw-charts-hidden-element">';
+  $output_select = '<select id="year" class="mmw-charts-hidden-element visible-xs-inline-block hidden-sm hidden-md hidden-lg">';
   $selected = "selected";
   foreach ($year_to_display as $year) {
     $output_select .= '<option class="year-item" value="' . $year . '"' . $selected . '>' . $year . '</option>';
@@ -294,8 +341,14 @@ function _mmw_charts_generate_year_select_for_slider($year_to_display) {
  * @return string $output_select
  *   An html select tag for charts type values.
  */
-function _mmw_charts_generate_charts_type_select($type, $static_data) {
-  $output_select = '<select id="chart-types">';
+function _mmw_charts_generate_charts_type_select($type, $static_data, $themes) {
+  if (empty($themes)) {
+    $disabled = 'disabled';
+  }
+  else {
+    $disabled = '';
+  }
+  $output_select = '<select id="chart-types" class="labeled" ' . $disabled . '>';
   $selected = "";
   if (!$type) {
     $selected = "selected";
@@ -306,7 +359,38 @@ function _mmw_charts_generate_charts_type_select($type, $static_data) {
     if ($type == $typ['type']) {
       $selected = "selected";
     }
-    $output_select .= '<option data-units-excluded="' . implode(" ", $typ["units_exclude"]) . '" value="' . $typ['type'] . '" ' . $selected . '>' . $typ['name'] . '</option>';
+    $output_select .= '<option data-limited="' . $typ["limited"] . '" value="' . $typ['type'] . '" ' . $selected . '>' . $typ['name'] . '</option>';
+  }
+  return $output_select . '</select>';
+}
+
+/**
+ * Generate super categories for select tag.
+ *
+ * @param string $type
+ *   Charts type display.
+ * @param array $static_data
+ *   Static data defined by chart type to configure chart
+ *   display and data generation.
+ *
+ * @return string $output_select
+ *   An html select tag for super categ values.
+ */
+function _mmw_charts_generate_super_categ($type, $static_data) {
+  $static_data["superCateg"] = array(
+    t('Security of supply'),
+    t('Electricity'),
+    t('Transport'),
+    t('Energy efficiency'),
+    t('Decarbonisation'),
+    t('Markets and competitiveness'),
+  );
+  $output_select = '<select id="super-categ" class="labeled">';
+  $selected = "selected";
+  $output_select .= '<option value="" ' . $selected . '>' . t('Please choose a category') . '</option>';
+  foreach ($static_data["superCateg"] as $categ_value => $categ_name) {
+    $selected = "";
+    $output_select .= '<option value="' . $categ_value . '" ' . $selected . '>' . $categ_name . '</option>';
   }
   return $output_select . '</select>';
 }
@@ -328,7 +412,7 @@ function _mmw_charts_get_data_map($static_data, $countries) {
   $countries_mapping = $static_data['countryMapping'];
   $colors = $static_data['colors'];
   foreach ($countries as $country_key => $country) {
-    // dataMap used in mini-map.js.
+    // Data_map used in mini-map.js.
     $data_map[] = array(
       "id" => strtoupper($countries_mapping[$country_key]),
       "value" => 1,
@@ -355,9 +439,29 @@ function _mmw_charts_export_form($form, &$form_state) {
     ),
     'export-form' => array(
       '#markup' => '<button id="export-form" type="submit" class="btn btn-submit">
-                  <i class="fa fa-download"></i>' . t('Export data (xls)') . '</button>',
+                  <i class="fa fa-download"></i><span>' . t('Export data (xls)') . '</span></button>',
 
     ),
   );
   return $form;
+}
+
+/**
+ * Get a link for node reference for an tooltip link.
+ *
+ * @param int $value
+ *   The nid of node for the link.
+ *
+ * @return string
+ *   An html render for a link.
+ */
+function _mmw_charts_get_tooltip_link($value, $text) {
+  if (!empty($value) && is_numeric($value)) {
+    $node = node_load($value);
+    if (!empty($node)) {
+      return "<span class='btn-print'> | </span>" . l($text, 'node/' . $node->nid);
+    }
+
+  }
+  return '';
 }

@@ -111,10 +111,10 @@ function _mmw_charts_action(&$node) {
       $parameters_js = $static_data['graphTypes'][$type];
       $parameters_js['type'] = $type;
       $parameters_js['commission'] = ($commission) ? 1 : 0;
-      $parameters_js['width'] = 710;
+      $parameters_js['width'] = "100%";
       $parameters_js['height'] = 500;
       if ($type == "maps/europe2") {
-        $parameters_js['width'] = 940;
+        $parameters_js['width'] = "100%";
         $parameters_js['height'] = 700;
       }
 
@@ -150,6 +150,7 @@ function _mmw_charts_action(&$node) {
         drupal_add_js($base_charts_js);
       }
     }
+
     $data_select_checkboxes = _mmw_charts_generate_data_select($themes, $menu);
     // Create style for.
     $color_style = array();
@@ -161,9 +162,20 @@ function _mmw_charts_action(&$node) {
     }
     drupal_add_css(implode(' ', $color_style), 'inline');
 
+    // Get the default landing image.
+    $image_background_charts = variable_get('mmw_charts_landing_image', '');
+    if (!empty($image_background_charts) && is_numeric($image_background_charts)) {
+      $file = file_load($image_background_charts);
+      if (!empty($file)) {
+        $image_background_charts = file_create_url($file->uri);
+      }
+    }
+
     // Set variable in content for used in template.
     $node->content['commission'] = $commission;
     $node->content['staticData'] = $static_data;
+    $node->content['intro_video'] = _mmw_charts_get_tooltip_link(variable_get('mmw_charts_intro_video_link', ''), t('Intro video'));
+    $node->content['glossary'] = _mmw_charts_get_tooltip_link(variable_get('mmw_charts_glossary_link', ''), t('Glossary'));
     $node->content['type'] = $type;
     $node->content['themes'] = $themes;
     $node->content['yearToDisplay'] = $year_to_display;
@@ -171,11 +183,12 @@ function _mmw_charts_action(&$node) {
     $node->content['menu'] = $menu;
     $node->content['countries'] = $countries;
     $node->content['otherChartsByYears'] = $other_charts_by_years;
-    $node->content['data_select'] = $data_select_checkboxes[0];
-    $node->content['data_checkboxes'] = $data_select_checkboxes[1];
-    $node->content['charts_type_select'] = _mmw_charts_generate_charts_type_select($type, $static_data);
+    $node->content['data_select'] = $data_select_checkboxes[1];
+    $node->content['data_checkboxes'] = $data_select_checkboxes[2];
+    $node->content['charts_type_select'] = _mmw_charts_generate_charts_type_select($type, $static_data, $themes);
+    $node->content['super_categ'] = $data_select_checkboxes[0];
     $node->content['data_map'] = _mmw_charts_get_data_map($static_data, $countries);
     $node->content['charts_form_exporter'] = drupal_get_form('_mmw_charts_export_form');
-    $node->content['image_background_charts'] = drupal_get_path('module', 'mmw_charts') . '/assets/images/dg-ener-reference-scenario-2.jpg';
+    $node->content['image_background_charts'] = $image_background_charts;
   }
 }

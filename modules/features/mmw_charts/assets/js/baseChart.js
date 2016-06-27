@@ -2,7 +2,7 @@
  * @file
  */
 
-jQuery(document).ready(function ($) {
+jQuery(document).ready(function($) {
   if (Drupal.settings.mmw_charts.parameters.commission) {
       buildChartCommission();
   }
@@ -20,19 +20,16 @@ jQuery(document).ready(function ($) {
 });
 
 function buildChartLocal() {
-  FusionCharts.ready(function () {
-      chart = new FusionCharts({
-          type: Drupal.settings.mmw_charts.parameters.type,
-          renderAt: 'chart-container',
-          width: Drupal.settings.mmw_charts.parameters.width,
-          height: Drupal.settings.mmw_charts.parameters.height,
-          dataFormat: 'json',
-          dataEmptyMessage: " ",
-          containerBackgroundOpacity: '0'
-        });
-      chart.render();
-  });
-
+  chart = new FusionCharts({
+      type: Drupal.settings.mmw_charts.parameters.type,
+      renderAt: 'chart-container',
+      width: Drupal.settings.mmw_charts.parameters.width,
+      height: Drupal.settings.mmw_charts.parameters.height,
+      dataFormat: 'json',
+      dataEmptyMessage: " ",
+      containerBackgroundOpacity: '0'
+    });
+  chart.render();
 }
 
 function buildChartCommission() {
