@@ -215,10 +215,16 @@ function _mmw_charts_get_select_countries($static_data, $countries, $type) {
     }
   }
 
+  // Check if countries_excludes array if !empty.
+  $countries_exclude = array();
+  if (!empty($static_data['graphTypes'][$type]['countries_exclude'])) {
+    $countries_exclude = $static_data['graphTypes'][$type]['countries_exclude'];
+  }
+
   return theme('select_countries', array(
     'countries_data' => $countries_data,
     'countries_selected' => $static_data['graphTypes'][$type]['countries_selected'],
-    'countries_exclude' => $static_data['graphTypes'][$type]['countries_exclude'],
+    'countries_exclude' => $countries_exclude,
   ));
 }
 
