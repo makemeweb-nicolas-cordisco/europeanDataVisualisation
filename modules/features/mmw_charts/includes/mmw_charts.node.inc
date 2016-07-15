@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * MMW Charts node function file.
@@ -77,7 +78,7 @@ function _mmw_charts_load_assets($module_path, $commission) {
  * @see ../templates/node--advanced-fusioncharts.tpl.php
  */
 function _mmw_charts_action(&$node) {
-  $commission = FALSE;
+  $commission = TRUE;
   $data_json = _mmw_charts_json_to_array($node);
   if (!empty($data_json)) {
     // Initalise variable for Javascript, used in main.js and export.js.

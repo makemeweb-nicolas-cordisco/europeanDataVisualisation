@@ -114,31 +114,34 @@
 
                 <div class="row">
                     <div class="col-xs-12">
-                    <div class="select-row keep-float">
-                        <label for="super-categ" class="select-label"><?php print t('Data:'); ?></label>
-                        <?php print $content['super_categ']; ?>
-                    </div>
-                    <div class="select-row keep-float">
-                        <?php print $content['data_select']; ?>
-                    </div>
-                    <div class="select-row pull-right pull-left-sm">
-                        <div id="graph-select-error-message" class="mmw-charts-hidden-element"><?php print t('Graph not compatible'); ?></div>
-                        <label for="chart-types" class="select-label"><?php print t('Graph:'); ?></label>
-                        <?php print $content['charts_type_select']; ?>
-                    </div>
+                        <div class="select-row keep-float">
+                            <label for="super-categ" class="select-label"><?php print t('Data:'); ?></label>
+                            <?php print $content['super_categ']; ?>
                         </div>
+                        <div class="select-row keep-float">
+                            <?php print $content['data_select']; ?>
+                        </div>
+                        <div class="select-row pull-right pull-left-sm">
+                            <div id="graph-select-error-message" class="mmw-charts-hidden-element"><?php print t('Graph not compatible'); ?></div>
+                            <label for="chart-types" class="select-label"><?php print t('Graph:'); ?></label>
+                            <?php print $content['charts_type_select']; ?>
+                        </div>
+                    </div>
                 </div>
-
                 <hr>
-
                 <div class="row">
                     <div class="col-xs-12">
                       <?php print $content['data_checkboxes']; ?>
                     </div>
                 </div>
+
+                <div id="units-message" style="display:none">
+                    Be aware: Two categories with different units selected!
+                </div>
             </div>
         </div>
-      <div class="charts-landing-img col-xs-12" <?php if(!empty($content['themes'])): ?>style="display:none;"<?php endif; ?>>
+      <div class="charts-landing-img col-xs-12" <?php if(!empty($content['themes'])): ?>style="display:none;"<?php
+     endif; ?>>
         <?php if(!empty($content['image_background_charts'])):
           print theme('image', array(
             'path' => $content['image_background_charts'],
@@ -188,6 +191,25 @@
           </div>
         </div>
       <?php endif; ?>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="categ-description" style="display:none;">
+            </div>
+            <div id="additional-message" style="display:none">
+                <div class="description-container" style="color:#333; font-weight:bold;">
+                    Left-hand axis refers to European Union; Right-hand axis refers to selected EU Countries
+                </div>
+            </div>
+            <div id="description-sample" style="display:none;">
+                <div class="description-container">
+                    <div class="label-description">
+                    </div>
+                    <div class="content-description">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="tooltips-row row visible-xs-block hidden-sm hidden-md hidden-lg">
       <div class="col-xs-12">

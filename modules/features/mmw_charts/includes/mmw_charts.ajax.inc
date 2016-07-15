@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * MMW Charts ajax function file.
@@ -172,7 +173,7 @@ function _mmw_charts_get_json_single_select($themes, $full_data, $type, $countri
       foreach ($country_data as $year_key => $val) {
         $tooltip = 'Country: ' . $countries_array[$country_key] . '{br}Value: ' . round($val, 2) . ' (' . $theme_data['unit'] . ')';
         $full_data['data'][$year_key][$countries_mapping[$country_key]] = array(
-          'label' => $countries_array[$country_key] . ', ' . round($val, 2) . ' (' . $theme_data['unit'] . ')',
+          'label' => $countries_array[$country_key],
           'value' => $val,
           'color' => $colors[$country_key],
           'toolText' => $tooltip,
@@ -181,7 +182,7 @@ function _mmw_charts_get_json_single_select($themes, $full_data, $type, $countri
     }
   }
   $data = array();
-  $full_data['chart']['caption'] = htmlspecialchars_decode($theme_data['title']) . " (" . $theme_data['unit'] . ")";
+  $full_data['chart']['caption'] = htmlspecialchars_decode($theme_data['title']);
   $data['fullData'] = $full_data;
   return $data;
 }
@@ -223,9 +224,19 @@ function _mmw_charts_get_json_map($themes, $full_data, $type, $countries_array, 
     foreach ($data['data'] as $country_key => $country_data) {
       if ($country_key != "eu28" && $country_key != "eu27") {
         foreach ($country_data as $year_key => $val2) {
+
+          $mappedCountryKey = $countries_mapping[$country_key];
+          // Exception for slovenia and slovakia.
+          if ($mappedCountryKey == 'SK') {
+            $mappedCountryKey = "EU.SK";
+          }
+          if ($mappedCountryKey == 'SI') {
+            $mappedCountryKey = "SK";
+          }
+
           // Max & min are calculated between all year and themes are added up.
-          if (array_key_exists($countries_mapping[$country_key], $full_data['data'][$year_key])) {
-            $val2 += $full_data['data'][$year_key][$countries_mapping[$country_key]]['value'];
+          if (array_key_exists($mappedCountryKey, $full_data['data'][$year_key])) {
+            $val2 += $full_data['data'][$year_key][$mappedCountryKey]['value'];
           }
           if ($val2 > $max) {
             $max = $val2;
@@ -233,7 +244,10 @@ function _mmw_charts_get_json_map($themes, $full_data, $type, $countries_array, 
           if ($val2 < $min) {
             $min = $val2;
           }
-          $full_data['data'][$year_key][$country_key] = array('id' => $countries_mapping[$country_key] , 'value' => $val2);
+          $full_data['data'][$year_key][$country_key] = array(
+            'id' => $mappedCountryKey,
+            'value' => round($val2, 2),
+          );
         }
       }
     }
@@ -244,16 +258,16 @@ function _mmw_charts_get_json_map($themes, $full_data, $type, $countries_array, 
     $full_data['data'][$year_key] = array_values($year_data);
   }
   $colorrange = $static_data['graphTypes'][$type]['colorrange'];
-  $colorrange['minvalue'] = $min;
-  $colorrange['color'][0]["maxvalue"] = ($max - $min) / 2;
-  $colorrange['color'][1]["maxvalue"] = $max;
+  $colorrange['minvalue'] = round($min, 2);
+  // $colorrange['color'][0]["maxvalue"] = ($max - $min) / 2;.
+  $colorrange['color'][0]["maxvalue"] = round($max, 2);
   $full_data['colorrange'] = $colorrange;
 
   unset($full_data['dataset']);
   unset($full_data['categories']);
 
   $data = array();
-  $full_data['map']['caption'] = htmlspecialchars_decode(trim($title, ", "));
+  $full_data['map']['caption'] = htmlspecialchars_decode(trim($title, ", ")) . " (" . implode(', ', $units) . ")";;
   $full_data['map']['yaxisname'] = implode(",", $units);
   $data['fullData'] = $full_data;
 

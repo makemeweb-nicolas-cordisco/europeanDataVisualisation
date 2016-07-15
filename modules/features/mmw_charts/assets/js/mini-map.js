@@ -32,8 +32,12 @@ jQuery(document).ready(function ($) {
         $(this).find("input:checked").each(function () {
             var regex = /^[A-Z]{2}$/g;
           if ($(this).val().match(regex)) {
+              //dans fusionchart sk est la slovénie et eu.sk la slovakie
+              var val = $(this).val();
+              if(val=='SK'){val='eu.sk';}
+              if(val=='SI'){val='sk';}
               mapDataSource.data.push({
-                  id: $(this).val(),
+                  id: val,
                   value: ($(this).prop('checked') ? "" : 0),
                   color: $(this).data('color'),
                   tooltext: ""
@@ -63,7 +67,9 @@ function buildMapLocal($) {
           dataSource: mapDataSource,
           events: {
               entityClick: function (evt, data) {
-                  var iso = data.id.replace('EU.', "");
+                  var iso = data.id.replace('eu.', "");
+                  //bordel avec les code pays
+                  if(data.id=='sk'){iso='si';}
                   $('#country-select').find("input[value=" + iso.toUpperCase() + "]").click();
               },
               rendered: function (eventObj, dataObj) {

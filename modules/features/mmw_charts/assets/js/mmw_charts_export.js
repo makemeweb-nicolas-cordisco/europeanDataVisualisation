@@ -22,6 +22,7 @@ jQuery(document).ready(function ($) {
             data.themes = [$('#themes-lvl1').val()];
         }
 
+        data.charttype = $('#chart-types').val();
         data.nid = Drupal.settings.mmw_charts.node_id;
 
         $('.exporter-value').val(JSON.stringify(data));

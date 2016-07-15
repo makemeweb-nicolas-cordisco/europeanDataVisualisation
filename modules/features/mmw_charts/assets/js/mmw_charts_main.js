@@ -43,6 +43,7 @@ jQuery(document).ready(function ($) {
           $('.charts-landing-img').hide();
           $('#themes .main-theme-container.' + $(this).val() + ' input:first').trigger('change');
       }
+      updateCategoriesDescription();
       $('#chart-types').removeProp('disabled');
     });
     
@@ -57,6 +58,7 @@ jQuery(document).ready(function ($) {
         $('#countries-chart-container').hide();
         $('#themes-lvl1 .hidden').remove();
         $('#themes-lvl1').removeAttr('disabled');
+        updateCategoriesDescription();
         
     });
 
@@ -71,6 +73,19 @@ jQuery(document).ready(function ($) {
             // Defined in main.js.
             updateData(themesValues);
         }
+        //units disparity message
+        $unitsSelected = [];
+        $('#themes input:checkbox:checked').each(function( index ) {
+            if($.inArray($(this).data('unit'), $unitsSelected)==(-1)){
+                $unitsSelected.push($(this).data('unit'));
+            }
+        });
+        if($unitsSelected.length>1){
+            $('#units-message').show();
+        }else{
+            $('#units-message').hide();
+        }
+
         // If data not compatible with graph type.
         if ($('#chart-types').val() != "" && $("#chart-types option:selected").data('limited') && $("#themes input:checked[data-limited=1]").length>0) {
           $('#chart-types').val("");
@@ -80,6 +95,7 @@ jQuery(document).ready(function ($) {
             $('#countries-chart-container').hide();
             $('#graph-select-error-message').show();
         }
+        updateCategoriesDescription();
         hideGraphForUnit();
     });
 
@@ -125,7 +141,8 @@ jQuery(document).ready(function ($) {
     });
 
     $('.lvl4-button').click(function(evt){
-        $('.menu-lvl4').toggle();
+        var parent = $(this).closest('.menu-lvl3');
+        parent.nextUntil( ".menu-lvl3" ).toggle();
       if ($(this).text() == "+") {
           $(this).text("-");
       }
@@ -255,6 +272,45 @@ jQuery(document).ready(function ($) {
                   }
                 });
       }
+    }
+
+    function updateCategoriesDescription(){
+        var sample = $($('#description-sample').html());
+        var categParent = $('#categ-description');
+        categParent.empty();
+        categParent.hide();
+        if($('#chart-types').val()=='scrollcombidy2d'){
+            categParent.append($('#additional-message').html());
+            categParent.show();
+        }
+
+        var lvl0description = $('#themes-lvl0 option:selected').data('description');
+        if(lvl0description != ""){
+            var newCategDescr = sample.clone();
+            newCategDescr.find('.label-description').html($('#themes-lvl0 option:selected').text());
+            newCategDescr.find('.content-description').html(lvl0description);
+            categParent.append(newCategDescr);
+            categParent.show();
+        }
+
+        // var lvl1description = $('#themes-lvl1 option:selected').data('description');
+        // if(lvl1description != ""){
+        //     var newCategDescr = sample.clone();
+        //     newCategDescr.find('.label-description').html($('#themes-lvl1 option:selected').text());
+        //     newCategDescr.find('.content-description').html(lvl1description);
+        //     categParent.append(newCategDescr);
+        // }
+
+        $('#themes input:checkbox:checked').each(function( index ) {
+            var description = $( this ).data('description');
+            if(description != ""){
+                var newCategDescr = sample.clone();
+                newCategDescr.find('.label-description').html($( this ).next().text());
+                newCategDescr.find('.content-description').html(description);
+                categParent.append(newCategDescr);
+                categParent.show();
+            }
+        });
     }
 
     function updateData(themesValue){

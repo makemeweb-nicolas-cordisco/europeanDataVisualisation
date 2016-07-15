@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * MMW Charts data settings function file.
@@ -109,6 +110,8 @@ function _mmw_charts_get_static_data($nid) {
         "bgAlpha" => "100",
         "canvasBgAlpha" => "100",
         "theme" => $theme,
+        "exportEnabled" => '1',
+        "exportAtClientSide" => '1',
       ),
     ),
     "msline" => array(
@@ -134,6 +137,8 @@ function _mmw_charts_get_static_data($nid) {
         "canvasBgAlpha" => "100",
         "showValues" => "0",
         "theme" => $theme,
+        "exportEnabled" => '1',
+        "exportAtClientSide" => '1',
       ),
     ),
     "doughnut2d" => array(
@@ -162,6 +167,8 @@ function _mmw_charts_get_static_data($nid) {
         "showValues" => "1",
         "startingAngle" => "320",
         "theme" => $theme,
+        "exportEnabled" => '1',
+        "exportAtClientSide" => '1',
       ),
     ),
     "pyramid" => array(
@@ -188,6 +195,8 @@ function _mmw_charts_get_static_data($nid) {
         "canvasBgAlpha" => "100",
         "showBorder" => "0",
         "theme" => $theme,
+        "exportEnabled" => '1',
+        "exportAtClientSide" => '1',
       ),
     ),
     "scrollcombidy2d" => array(
@@ -226,11 +235,13 @@ function _mmw_charts_get_static_data($nid) {
         "canvasBgAlpha" => "100",
         "sYAxisMaxValue" => "",
         "theme" => $theme,
+        "exportEnabled" => '1',
+        "exportAtClientSide" => '1',
       ),
     ),
     "maps/europe2" => array(
       "name" => "Europe map chart",
-      "categories_multiselect" => TRUE,
+      "categories_multiselect" => FALSE,
       "type" => "maps/europe2",
       "select_country" => FALSE,
       "countries_selected" => array(),
@@ -266,6 +277,8 @@ function _mmw_charts_get_static_data($nid) {
         "bgAlpha" => "100",
         "canvasBgAlpha" => "100",
         "showborder" => 1,
+        "exportEnabled" => '1',
+        "exportAtClientSide" => '1',
       ),
       "colorrange" => array(
         "minvalue" => 0,
@@ -276,11 +289,6 @@ function _mmw_charts_get_static_data($nid) {
         "color" => array(
           array(
             "maxvalue" => 0,
-            "displayvalue" => "Average",
-            "code" => "f8bd19",
-          ),
-          array(
-            "maxvalue" => 0,
             "code" => "e44a00",
           ),
         ),
@@ -288,7 +296,7 @@ function _mmw_charts_get_static_data($nid) {
     ),
     "scrollstackedcolumn2d" => array(
       "name" => "Scroll stacked column chart",
-      "categories_multiselect" => TRUE,
+      "categories_multiselect" => FALSE,
       "type" => "scrollstackedcolumn2d",
       "select_country" => TRUE,
       "countries_exclude" => array('eu27', 'eu28'),
@@ -318,11 +326,13 @@ function _mmw_charts_get_static_data($nid) {
         "bgAlpha" => "100",
         "canvasBgAlpha" => "100",
         "linethickness" => "3",
+        "exportEnabled" => '1',
+        "exportAtClientSide" => '1',
       ),
     ),
     "stackedarea2d" => array(
       "name" => "Stacked area chart",
-      "categories_multiselect" => TRUE,
+      "categories_multiselect" => FALSE,
       "type" => "stackedarea2d",
       "select_country" => TRUE,
       "countries_exclude" => array('eu27', 'eu28'),
@@ -355,6 +365,8 @@ function _mmw_charts_get_static_data($nid) {
         "canvasBgAlpha" => "100",
         "legendshadow" => "0",
         "linethickness" => "3",
+        "exportEnabled" => '1',
+        "exportAtClientSide" => '1',
       ),
     ),
   );

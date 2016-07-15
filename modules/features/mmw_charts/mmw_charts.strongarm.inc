@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * mmw_charts.strongarm.inc

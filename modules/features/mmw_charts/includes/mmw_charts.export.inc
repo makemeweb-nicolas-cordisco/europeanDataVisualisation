@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * MMW Charts export charts function file.
@@ -42,11 +43,11 @@ function _mmw_charts_export_action() {
     $sheet = new PHPExcel_Worksheet();
     $sheet->getColumnDimension("A")->setAutoSize(TRUE);
     $sheet->setTitle(substr(drupal_html_id($theme_data["title"]), 0, 25) . "...");
-    $sheet->getCell("A1")->setValue('Source: PRIMES');
+    $sheet->getCell("A1")->setValue('Source: EU Reference Scenario 2016 based on PRIMES, GAINS');
     $i = 0;
     $row_index = 1;
     foreach ($theme_data["data"] as $country => $values) {
-      if (isset($countries[$countries_mapping[$country]])) {
+      if (isset($countries[$countries_mapping[$country]]) || $data['charttype'] == 'maps/europe2') {
         $row_index++;
         // Set headers.
         if ($i === 0) {
@@ -57,7 +58,7 @@ function _mmw_charts_export_action() {
           }
           $row_index++;
         }
-        $sheet->getCell("A" . $row_index)->setValue($theme_data["title"] . " : " . $country);
+        $sheet->getCell("A" . $row_index)->setValue($theme_data["title"] . ' (' . $theme_data["unit"] . ')' . ": " . $static_data['countryMapping'][$country]);
         $col = 1;
         foreach ($values as $value) {
           $sheet->setCellValueByColumnAndRow($col, $row_index, $value);

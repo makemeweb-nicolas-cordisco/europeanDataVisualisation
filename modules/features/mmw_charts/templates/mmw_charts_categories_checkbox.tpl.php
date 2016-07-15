@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * MMW Charts theme implementation to categories_checkbox field.
@@ -17,7 +18,7 @@
           <div class="row">
             <?php if(!$element['no-data']): ?>
               <div class="menu-lvl<?php print $element['level']; ?> checkbox checkbox-primary">
-                <input id="theme-<?php print $element['file']; ?>" data-limited="<?php print $element['limited-data']; ?>" type="checkbox" name="themes[]" value="<?php print $element['file']; ?>" <?php print ' ' . $element['checked']; ?>>
+                <input id="theme-<?php print $element['file']; ?>" data-unit="<?php print $element['unit']; ?>" data-limited="<?php print $element['limited-data']; ?>" data-description="<?php print $element['description']; ?>" type="checkbox" name="themes[]" value="<?php print $element['file']; ?>" <?php print ' ' . $element['checked']; ?>>
                 <label for="theme-<?php print $element['file']; ?>"><?php print $element['name']; ?></label>
               </div>
             <?php endif; ?>

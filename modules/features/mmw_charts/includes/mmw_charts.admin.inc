@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * MMW Charts administration page function file.

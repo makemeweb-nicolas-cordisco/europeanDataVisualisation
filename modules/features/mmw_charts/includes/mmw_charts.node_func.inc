@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * MMW Charts node element function file.
@@ -117,8 +118,10 @@ function _mmw_charts_get_categories_checkbox($themes_values, $menu, $display_typ
         'hidden' => $hidden,
         'no-data' => $item2['no-data'],
         'limited-data' => $item2['limited-data'],
+        'unit' => $item2['unit'],
         'name' => $item2['name'],
         'checked' => $checked,
+        'description' => $item2['description'],
         'level' => $lvl,
       );
       if (!empty($item2['children'])) {
@@ -158,6 +161,8 @@ function _mmw_charts_get_sub_categories_checkbox(&$element, $items, $themes, $lv
       $element[$k]['no-data'] = $item['no-data'];
       $element[$k]['file'] = $item['file'];
       $element[$k]['name'] = $item['name'];
+      $element[$k]['unit'] = $item['unit'];
+      $element[$k]['description'] = $item['description'];
       $element[$k]['checked'] = $checked;
       $element[$k]['limited-data'] = $item['limited-data'];
       $element[$k]['level'] = $lvl;
@@ -213,6 +218,7 @@ function _mmw_charts_get_select_countries($static_data, $countries, $type) {
   return theme('select_countries', array(
     'countries_data' => $countries_data,
     'countries_selected' => $static_data['graphTypes'][$type]['countries_selected'],
+    'countries_exclude' => $static_data['graphTypes'][$type]['countries_exclude'],
   ));
 }
 
@@ -284,13 +290,13 @@ function _mmw_charts_generate_data_select($themes, $menu) {
           }
         }
       }
-      $output_select .= '<option class="menu-lvl1 ' . $item['file'] . ' ' . $lvl1_hidden . '" data-limited="' . $item2['limited-data'] . '" value="' . $item2['file'] . '" ' . $lvl1_selected . '>' . $item2['name'] . '</option>';
+      $output_select .= '<option class="menu-lvl1 ' . $item['file'] . ' ' . $lvl1_hidden . '" data-description="' . $item2['description'] . '" data-limited="' . $item2['limited-data'] . '" value="' . $item2['file'] . '" ' . $lvl1_selected . '>' . $item2['name'] . '</option>';
     }
 
     $data_select_element['options'][$item['file']] = array(
       'value' => $item['name'],
     );
-    $output_select_level0 .= '<option class="menu-lvl0" value="' . $item['file'] . '" ' . $selected . '>' . $item['name'] . '</option>';
+    $output_select_level0 .= '<option class="menu-lvl0" value="' . $item['file'] . '" data-description="' . $item['description'] . '" ' . $selected . '>' . $item['name'] . '</option>';
   }
   if (empty($themes)) {
     $selected = "selected";

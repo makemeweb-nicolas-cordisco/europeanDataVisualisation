@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * MMW Charts Class XLS Reader.
@@ -265,15 +266,19 @@ class XLSReader {
       }
     }
     // No data in row.
-    $cell_f = $sheet->getCell("F" . $index);
-    $value_f = $cell_f->getValue();
-    $no_data = ($value_f == 'no') ? TRUE : FALSE;
+    $cell_g = $sheet->getCell("G" . $index);
+    $value_g = $cell_g->getValue();
+    $no_data = ($value_g == 'no') ? TRUE : FALSE;
     // Limited data.
-    $limited_data = (trim($value_f) == 'limited') ? TRUE : FALSE;
+    $limited_data = (trim($value_g) == 'limited') ? TRUE : FALSE;
 
     // Unit.
+    $cell_f = $sheet->getCell("F" . $index);
+    $unit = $cell_f->getValue();
+
+    // description.
     $cell_e = $sheet->getCell("E" . $index);
-    $unit = $cell_e->getValue();
+    $description = $cell_e->getValue();
 
     if ($hierarchy) {
       $prefix = "s_" . $index;
@@ -287,6 +292,7 @@ class XLSReader {
         "no-data" => $no_data,
         "limited-data" => $limited_data,
         "unit" => $unit,
+        "description" => $description,
       );
     }
   }
@@ -388,6 +394,7 @@ class XLSReader {
         "no-data" => $data["no-data"],
         "limited-data" => $data["limited-data"],
         "unit" => $data["unit"],
+        "description" => $data["description"],
         "children" => array(),
       );
       $previous_parent_h1 = $file_key;
@@ -400,6 +407,7 @@ class XLSReader {
         "no-data" => $data["no-data"],
         "limited-data" => $data["limited-data"],
         "unit" => $data["unit"],
+        "description" => $data["description"],
         "children" => array(),
       );
       $previous_parent_h2 = $file_key;
@@ -412,6 +420,7 @@ class XLSReader {
         "no-data" => $data["no-data"],
         "limited-data" => $data["limited-data"],
         "unit" => $data["unit"],
+        "description" => $data["description"],
         "children" => array(),
       );
       $previous_parent_h3 = $file_key;
@@ -424,6 +433,7 @@ class XLSReader {
         "no-data" => $data["no-data"],
         "limited-data" => $data["limited-data"],
         "unit" => $data["unit"],
+        "description" => $data["description"],
         "children" => array(),
       );
     }
