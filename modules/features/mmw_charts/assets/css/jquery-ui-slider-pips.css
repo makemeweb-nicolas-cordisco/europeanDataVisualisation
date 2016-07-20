@@ -111,8 +111,7 @@
 .ui-slider-float .ui-slider-handle.ui-state-focus .ui-slider-tip-label,
 .ui-slider-float .ui-slider-handle:focus .ui-slider-tip,
 .ui-slider-float .ui-slider-handle.ui-state-focus .ui-slider-tip-label,
-.ui-slider-float .ui-slider-handle:focus .ui-slider-tip-label
-.ui-slider-float .ui-slider-handle.ui-state-focus .ui-slider-tip-label {
+.ui-slider-float .ui-slider-handle:focus .ui-slider-tip-label .ui-slider-float .ui-slider-handle.ui-state-focus .ui-slider-tip-label {
   outline: none;
 }
 
@@ -300,16 +299,16 @@
         the new label colours shown */
 .ui-slider-pips [class*=ui-slider-pip-initial] {
   font-weight: bold;
-  color: #14CA82;
+  color: #14ca82;
 }
 
 .ui-slider-pips .ui-slider-pip-initial-2 {
-  color: #1897C9;
+  color: #1897c9;
 }
 
 .ui-slider-pips [class*=ui-slider-pip-selected] {
   font-weight: bold;
-  color: #FF7A00;
+  color: #ff7a00;
 }
 
 .ui-slider-pips .ui-slider-pip-inrange {
@@ -317,7 +316,7 @@
 }
 
 .ui-slider-pips .ui-slider-pip-selected-2 {
-  color: #E70081;
+  color: #e70081;
 }
 
 .ui-slider-pips [class*=ui-slider-pip-selected] .ui-slider-line,

@@ -32,7 +32,7 @@ function _mmw_charts_converts_excel_to_json($form, &$form_state) {
     $reader->createJsonFromFile();
 
     $ouput = $reader->getOutputJson();
-    $json = json_encode($ouput);
+    $json = drupal_json_encode($ouput);
     $form_state['values']['mmw_charts_json'][LANGUAGE_NONE][0]['value'] = $json;
   }
 }

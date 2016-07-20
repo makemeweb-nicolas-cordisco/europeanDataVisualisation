@@ -32,10 +32,12 @@ jQuery(document).ready(function ($) {
         $(this).find("input:checked").each(function () {
             var regex = /^[A-Z]{2}$/g;
           if ($(this).val().match(regex)) {
-              //dans fusionchart sk est la slovénie et eu.sk la slovakie
+              // Dans fusionchart sk est la slovénie et eu.sk la slovakie.
               var val = $(this).val();
-              if(val=='SK'){val='eu.sk';}
-              if(val=='SI'){val='sk';}
+              if (val == 'SK') {
+val = 'eu.sk';}
+              if (val == 'SI') {
+val = 'sk';}
               mapDataSource.data.push({
                   id: val,
                   value: ($(this).prop('checked') ? "" : 0),
@@ -68,8 +70,9 @@ function buildMapLocal($) {
           events: {
               entityClick: function (evt, data) {
                   var iso = data.id.replace('eu.', "");
-                  //bordel avec les code pays
-                  if(data.id=='sk'){iso='si';}
+                  // Bordel avec les code pays.
+                  if (data.id == 'sk') {
+iso = 'si';}
                   $('#country-select').find("input[value=" + iso.toUpperCase() + "]").click();
               },
               rendered: function (eventObj, dataObj) {

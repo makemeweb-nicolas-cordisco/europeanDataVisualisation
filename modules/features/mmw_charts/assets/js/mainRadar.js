@@ -6,18 +6,18 @@ function updateChart(){
   jQuery(document).ready(function ($) {
     var year = $('#year').val();
     var countriesValues = [];
-    $('#country-select input:not(#all-countries):checked').each(function(index) {
+    $('#country-select input:not(#all-countries):checked').each(function (index) {
         countriesValues.push($(this).val());
     });
-    var themesValues = $('#themes input:checkbox:checked').map(function() {
+    var themesValues = $('#themes input:checkbox:checked').map(function () {
         return this.value;
     }).get();
     var dataChart = [];
     var categoriesChart = [];
 
-    $.each(countriesValues, function(countryIndex,countryCode) {
+    $.each(countriesValues, function (countryIndex,countryCode) {
         categoriesChart.push(data.categories[countryCode]);
-        $.each(themesValues, function(themeIndex, theme) {
+        $.each(themesValues, function (themeIndex, theme) {
           if (!(themeIndex in dataChart)) {
               dataChart[themeIndex] = {data:[],seriesname:""};
           }

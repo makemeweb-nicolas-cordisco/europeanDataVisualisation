@@ -405,8 +405,8 @@ body.node-type-advanced-fusioncharts {
 }
 /* line 336, ../../sass/mmw_charts_main.scss */
 .mmw-charts-main-container #container-charts-controls select:disabled {
-  color: #B3B0B0;
-  background: #ECECEC;
+  color: #b3b0b0;
+  background: #ececec;
 }
 /* line 341, ../../sass/mmw_charts_main.scss */
 .mmw-charts-main-container #container-charts-controls label {

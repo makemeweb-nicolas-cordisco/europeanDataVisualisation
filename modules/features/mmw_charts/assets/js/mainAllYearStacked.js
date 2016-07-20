@@ -4,18 +4,18 @@
 
 function updateChart(){
   jQuery(document).ready(function ($) {
-    var themesValues = $('#themes input:checkbox:checked').map(function() {
+    var themesValues = $('#themes input:checkbox:checked').map(function () {
         return this.value;
     }).get();
     var countriesValues = [];
-    $('#country-select input:not(#all-countries):checked').each(function(index) {
+    $('#country-select input:not(#all-countries):checked').each(function (index) {
         countriesValues.push($(this).val());
     });
     var dataset = [];
     var euDataValue = {};
 
-    $.each(data.dataset, function(countryCode,countryData) {
-        $.each(countryData, function(themeIndex, themeData) {
+    $.each(data.dataset, function (countryCode,countryData) {
+        $.each(countryData, function (themeIndex, themeData) {
           if ($.inArray(countryCode, countriesValues) >= 0) {
               var obj = jQuery.extend({}, themeData);
               dataset.push(obj);
@@ -31,7 +31,7 @@ function updateChart(){
                   // Replace country code of initial data by 'EU'.
                   euDataValue[themeIndex].seriesname = euDataValue[themeIndex].seriesname.slice(0, -2) + " EU";
 
-                  $.each(euDataValue[themeIndex].data, function(index, yearData) {
+                  $.each(euDataValue[themeIndex].data, function (index, yearData) {
                       var str = yearData.toolText;
                       var firstIndex = str.indexOf('{br}Country') + 12;
                       var secondIndex = str.indexOf('{br}Year');
@@ -41,7 +41,7 @@ function updateChart(){
               }
               else {
                     // Add countries data to "other countries" data.
-                    $.each(euDataValue[themeIndex].data, function(index, yearData) {
+                    $.each(euDataValue[themeIndex].data, function (index, yearData) {
                         yearData.value = parseFloat(yearData.value) + parseFloat(themeData.data[index].value);
                     });
               }
@@ -50,7 +50,7 @@ function updateChart(){
         });
     });
     // Add additionned values of others country at the end of data.
-    $.each(euDataValue, function(index, themeData) {
+    $.each(euDataValue, function (index, themeData) {
         dataset.push(themeData);
     });
 

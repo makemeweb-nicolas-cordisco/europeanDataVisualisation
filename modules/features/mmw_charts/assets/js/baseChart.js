@@ -2,7 +2,7 @@
  * @file
  */
 
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
   if (Drupal.settings.mmw_charts.parameters.commission) {
       buildChartCommission();
   }
@@ -56,24 +56,4 @@ function buildChartCommission() {
 }
 
 function HideAxis(){
-    // if(jQuery('#chart-types').val()=='scrollcombidy2d'){
-    //     var countriesValues = [];
-    //     jQuery('#country-select input:not(#all-countries):checked').each(function(index) {
-    //         countriesValues.push(jQuery(this).val());
-    //     });
-    //
-    //     if(countriesValues.indexOf('EU28')==(-1)){
-    //         jQuery('.fusioncharts-yaxis-0-gridlabels').hide();
-    //         jQuery('.fusioncharts-yaxis-1-gridlabels').show();
-    //         jQuery('.fusioncharts-yaxis-0-title').hide();
-    //         jQuery('.fusioncharts-yaxis-1-title').show();
-    //     }else{
-    //         jQuery('.fusioncharts-yaxis-0-gridlabels').show();
-    //         jQuery('.fusioncharts-yaxis-0-title').show();
-    //         if(countriesValues.length==1){
-    //             jQuery('.fusioncharts-yaxis-1-gridlabels').hide();
-    //             jQuery('.fusioncharts-yaxis-1-title').hide();
-    //         }
-    //     }
-    // }
 }

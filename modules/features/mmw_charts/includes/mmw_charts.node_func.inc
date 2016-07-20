@@ -426,12 +426,12 @@ function _mmw_charts_get_data_map($static_data, $countries) {
   foreach ($countries as $country_key => $country) {
     // Data_map used in mini-map.js.
     $data_map[] = array(
-      "id" => strtoupper($countries_mapping[$country_key]),
+      "id" => drupal_strtoupper($countries_mapping[$country_key]),
       "value" => 1,
       "color" => $colors[$country_key],
     );
   }
-  return theme('hidden', array('element' => array('#value' => json_encode($data_map), '#attributes' => array('class' => 'data-map'))));
+  return theme('hidden', array('element' => array('#value' => drupal_json_encode($data_map), '#attributes' => array('class' => 'data-map'))));
 }
 
 /**

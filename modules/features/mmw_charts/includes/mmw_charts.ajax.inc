@@ -74,7 +74,7 @@ function _mmw_charts_get_json_action() {
   $data_processed = $method($themes, $full_data, $type, $countries_array, $static_data);
   $data_to_send["data"] = $data_processed['fullData'];
 
-  echo json_encode($data_to_send);
+  echo drupal_json_encode($data_to_send);
 }
 
 /**

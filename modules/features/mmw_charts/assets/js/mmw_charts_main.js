@@ -20,23 +20,23 @@ var entityDefs = [];
 function hideGraphForUnit() {
   jQuery('#chart-types').html(chartTypeOptions);
   jQuery("#chart-types option").show();
-  if(jQuery("#themes input:checked[data-limited=1]").length>0){
+  if (jQuery("#themes input:checked[data-limited=1]").length > 0) {
     jQuery("#chart-types option[data-limited=1]").remove();
   }
 }
 jQuery(document).ready(function ($) {
 
-    //for IE remove hidden option because it is impossible to hide option in ie
+    // For IE remove hidden option because it is impossible to hide option in ie.
     selectLvl1Options = $('#themes-lvl1').html();
     chartTypeOptions = $('#chart-types').html();
     $('#themes-lvl1 .hidden').remove();
-    
-    $('#themes-lvl1').change(function(evt){
+
+    $('#themes-lvl1').change(function (evt) {
       $('#themes .main-theme-container input').prop('checked', false);
       $('#themes .main-theme-container.' + $(this).val() + ' input:first').prop('checked', true);
       $('#themes .main-theme-container').hide();
       $('#themes .main-theme-container.' + $(this).val()).show();
-      
+
       if ($('#chart-types').val() != "") {
           $('#countries-chart-container').show();
           $('.timeline').show();
@@ -46,12 +46,12 @@ jQuery(document).ready(function ($) {
       updateCategoriesDescription();
       $('#chart-types').removeProp('disabled');
     });
-    
-    $('#themes-lvl0').change(function(evt){
+
+    $('#themes-lvl0').change(function (evt) {
         $('#themes-lvl1').html(selectLvl1Options);
         $('#themes-lvl1 option[value!=""]').removeAttr('selected').addClass('hidden');
         $('#themes-lvl1 option[value=""]').prop('selected', true);
-        $('#themes-lvl1 option.'+$(this).val()).removeClass('hidden');
+        $('#themes-lvl1 option.' + $(this).val()).removeClass('hidden');
         $('.main-theme-container').hide();
         $('.timeline').hide();
         $('.charts-landing-img').show();
@@ -59,35 +59,36 @@ jQuery(document).ready(function ($) {
         $('#themes-lvl1 .hidden').remove();
         $('#themes-lvl1').removeAttr('disabled');
         updateCategoriesDescription();
-        
+
     });
 
-    $('#themes input').change(function(evt){
+    $('#themes input').change(function (evt) {
       if (Drupal.settings.mmw_charts.parameters && !Drupal.settings.mmw_charts.parameters['categories_multiselect']) {
           $('#themes input:checkbox:checked:not(#' + $(this).attr('id') + ')').removeAttr('checked');
       }
-        var themesValues = $('#themes input:checkbox:checked').map(function() {
+        var themesValues = $('#themes input:checkbox:checked').map(function () {
             return this.value;
         }).get();
         if (themesValues.length > 0 && $('#chart-types').val() != "") {
             // Defined in main.js.
             updateData(themesValues);
         }
-        //units disparity message
+        // Units disparity message.
         $unitsSelected = [];
-        $('#themes input:checkbox:checked').each(function( index ) {
-            if($.inArray($(this).data('unit'), $unitsSelected)==(-1)){
+        $('#themes input:checkbox:checked').each(function (index) {
+            if ($.inArray($(this).data('unit'), $unitsSelected) == (-1)) {
                 $unitsSelected.push($(this).data('unit'));
             }
         });
-        if($unitsSelected.length>1){
+        if ($unitsSelected.length > 1) {
             $('#units-message').show();
-        }else{
+        }
+else {
             $('#units-message').hide();
         }
 
         // If data not compatible with graph type.
-        if ($('#chart-types').val() != "" && $("#chart-types option:selected").data('limited') && $("#themes input:checked[data-limited=1]").length>0) {
+        if ($('#chart-types').val() != "" && $("#chart-types option:selected").data('limited') && $("#themes input:checked[data-limited=1]").length > 0) {
           $('#chart-types').val("");
             $('.main-theme-container').hide();
             $('.timeline').hide();
@@ -102,7 +103,7 @@ jQuery(document).ready(function ($) {
     var jsonString = $('.data-map').val();
     if (jsonString) {
         var jsonObj = JSON.parse($('.data-map').val());
-        $.each(jsonObj, function(index, dataCountry) {
+        $.each(jsonObj, function (index, dataCountry) {
             var internalIdValue = "EU." + dataCountry.id;
 
             // Exeption for fusion chart internal id.
@@ -126,7 +127,7 @@ jQuery(document).ready(function ($) {
             };
             entityDefs.push(obj);
         });
-        $.each(countriesLeft, function(index, dataCountry) {
+        $.each(countriesLeft, function (index, dataCountry) {
             var obj = {
                 internalId: "EU." + dataCountry.toUpperCase(),
                 newId: dataCountry.toUpperCase(),
@@ -136,13 +137,13 @@ jQuery(document).ready(function ($) {
         });
     }
 
-    $(".btn-print").click(function() {
+    $(".btn-print").click(function () {
         window.print();
     });
 
-    $('.lvl4-button').click(function(evt){
+    $('.lvl4-button').click(function (evt) {
         var parent = $(this).closest('.menu-lvl3');
-        parent.nextUntil( ".menu-lvl3" ).toggle();
+        parent.nextUntil(".menu-lvl3").toggle();
       if ($(this).text() == "+") {
           $(this).text("-");
       }
@@ -151,11 +152,11 @@ jQuery(document).ready(function ($) {
       };
     });
 
-    $('#chart-types').change(function(evt){
+    $('#chart-types').change(function (evt) {
         var val = $(this).val();
         var themesValues = "";
       if ($('#themes input:checkbox:checked')) {
-          themesValues = $('#themes input:checkbox:checked').map(function() {
+          themesValues = $('#themes input:checkbox:checked').map(function () {
               return this.value;
           }).get();
       }
@@ -166,7 +167,7 @@ jQuery(document).ready(function ($) {
       }
     });
 
-    $('#scenario').change(function(evt) {
+    $('#scenario').change(function (evt) {
         var val = $(this).val();
       if (val != '_none') {
           var themesValues = "";
@@ -175,7 +176,7 @@ jQuery(document).ready(function ($) {
             typeValues = $('#chart-types').val();
         }
         if ($('#themes input:checkbox:checked')) {
-            themesValues = $('#themes input:checkbox:checked').map(function() {
+            themesValues = $('#themes input:checkbox:checked').map(function () {
                 return this.value;
             }).get();
         }
@@ -186,11 +187,11 @@ jQuery(document).ready(function ($) {
 
     if (typeof Drupal.settings.mmw_charts.parameters !== 'undefined') {
       if (Drupal.settings.mmw_charts.parameters['select_country']) {
-          $('#country-select input:not(#all-countries)').change(function(evt){
+          $('#country-select input:not(#all-countries)').change(function (evt) {
               updateChart();
           });
 
-            $('#all-countries').change(function(evt){
+            $('#all-countries').change(function (evt) {
               if ($(this).prop('checked')) {
                   $('#country-check-eu28').removeAttr('checked');
                   $('#country-select input:not(#all-countries, #country-check-eu28)').prop('checked',true);
@@ -201,17 +202,17 @@ jQuery(document).ready(function ($) {
                 updateChart();
             });
       }
-      if($('#country-select').length) {
-          $('#show-country-select-mmw-charts').click(function(e) {
+      if ($('#country-select').length) {
+          $('#show-country-select-mmw-charts').click(function (e) {
               var link_country_mobile = $(this);
               e.preventDefault();
-              if($('#country-select').hasClass('hidden-xs')) {
-                $('#country-select').removeClass('hidden-xs').hide().slideToggle('slow', function(){
+              if ($('#country-select').hasClass('hidden-xs')) {
+                $('#country-select').removeClass('hidden-xs').hide().slideToggle('slow', function () {
                     link_country_mobile.find('span').text('Hide countries');
                 });
               }
               else {
-                $('#country-select').slideToggle('slow', function(){
+                $('#country-select').slideToggle('slow', function () {
                     $('#country-select').addClass('hidden-xs');
                     link_country_mobile.find('span').text('Show countries');
                 });
@@ -219,12 +220,12 @@ jQuery(document).ready(function ($) {
           });
       }
       if (Drupal.settings.mmw_charts.parameters['timeline']) {
-          $('#year').change(function(evt){
+          $('#year').change(function (evt) {
               $('.countdown-year').html($(this).val());
               updateChart();
           });
 
-            years = $('#year option').map(function() {
+            years = $('#year option').map(function () {
                 return this.value;
             }).get();
 
@@ -240,7 +241,7 @@ jQuery(document).ready(function ($) {
                 .slider("pips", {
                     rest: "label",
                     labels: years
-                }).on("slidechange", function(e,ui) {
+                }).on("slidechange", function (e,ui) {
                     index = ui.value + 1;
 
                     $('#year option').removeAttr('selected');
@@ -248,7 +249,7 @@ jQuery(document).ready(function ($) {
                     $('#year').trigger('change');
                 });
 
-                $('#play').click(function(evt){
+                $('#play').click(function (evt) {
                     var icon = $('#play').find('i');
 
                   if (playing) {
@@ -279,13 +280,13 @@ jQuery(document).ready(function ($) {
         var categParent = $('#categ-description');
         categParent.empty();
         categParent.hide();
-        if($('#chart-types').val()=='scrollcombidy2d'){
+        if ($('#chart-types').val() == 'scrollcombidy2d') {
             categParent.append($('#additional-message').html());
             categParent.show();
         }
 
         var lvl0description = $('#themes-lvl0 option:selected').data('description');
-        if(lvl0description != ""){
+        if (lvl0description != "") {
             var newCategDescr = sample.clone();
             newCategDescr.find('.label-description').html($('#themes-lvl0 option:selected').text());
             newCategDescr.find('.content-description').html(lvl0description);
@@ -293,19 +294,11 @@ jQuery(document).ready(function ($) {
             categParent.show();
         }
 
-        // var lvl1description = $('#themes-lvl1 option:selected').data('description');
-        // if(lvl1description != ""){
-        //     var newCategDescr = sample.clone();
-        //     newCategDescr.find('.label-description').html($('#themes-lvl1 option:selected').text());
-        //     newCategDescr.find('.content-description').html(lvl1description);
-        //     categParent.append(newCategDescr);
-        // }
-
-        $('#themes input:checkbox:checked').each(function( index ) {
-            var description = $( this ).data('description');
-            if(description != ""){
+        $('#themes input:checkbox:checked').each(function (index) {
+            var description = $(this).data('description');
+            if (description != "") {
                 var newCategDescr = sample.clone();
-                newCategDescr.find('.label-description').html($( this ).next().text());
+                newCategDescr.find('.label-description').html($(this).next().text());
                 newCategDescr.find('.content-description').html(description);
                 categParent.append(newCategDescr);
                 categParent.show();
@@ -319,7 +312,7 @@ jQuery(document).ready(function ($) {
             "nid" : Drupal.settings.mmw_charts.node_id,
             "themes" : themesValue
         };
-        $.getJSON($('#ajax-url').attr('href'),param,function(result){
+        $.getJSON($('#ajax-url').attr('href'),param,function (result) {
             data = result.data;
             updateChart();
         });
@@ -327,7 +320,7 @@ jQuery(document).ready(function ($) {
 
     function update(time){
         var icon = $('#play').find('i');
-        setTimeout(function(){
+        setTimeout(function () {
           if (playing) {
             $(".slider").slider("value", index);
             if (index < years.length) {

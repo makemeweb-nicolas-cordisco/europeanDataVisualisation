@@ -16,7 +16,7 @@
  */
 function _mmw_charts_export_action() {
   $string = filter_input(INPUT_POST, "exporter");
-  $data = json_decode($string, TRUE);
+  $data = drupal_json_decode($string);
 
   // Get Json array.
   $node = node_load($data['nid']);
@@ -42,7 +42,7 @@ function _mmw_charts_export_action() {
     // Create new sheet.
     $sheet = new PHPExcel_Worksheet();
     $sheet->getColumnDimension("A")->setAutoSize(TRUE);
-    $sheet->setTitle(substr(drupal_html_id($theme_data["title"]), 0, 25) . "...");
+    $sheet->setTitle(drupal_substr(drupal_html_id($theme_data["title"]), 0, 25) . "...");
     $sheet->getCell("A1")->setValue('Source: EU Reference Scenario 2016 based on PRIMES, GAINS');
     $i = 0;
     $row_index = 1;

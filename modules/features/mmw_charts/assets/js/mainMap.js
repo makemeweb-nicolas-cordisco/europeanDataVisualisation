@@ -12,7 +12,7 @@ function updateChart(){
 
     // Disable hover on no EU country
     // countriesLeft defined in main.js.
-    $.each(countriesLeft, function(index, val) {
+    $.each(countriesLeft, function (index, val) {
         newData.data.push({id: val,value: null,useHoverColor: "0", showToolTip: "0"});
     });
     chart.setJSONData(newData);
